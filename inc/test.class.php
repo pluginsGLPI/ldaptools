@@ -51,28 +51,22 @@ class PluginLdaptoolsTest extends CommonGLPI {
    }
 
    public static function getIcon() {
-      return "fas fa-sign-in-alt";
+      return "fas fa-bug";
    }
 
    public static function show() {
-
-      if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) {
-         $_SESSION['glpi_use_mode'] = Session::NORMAL_MODE;
-      }
-
-      Session::checkRight("config", UPDATE);
-
       echo "<div class='center'>";
          echo "<table border='0' class='tab_cadrehov'>";
             echo "<thead>";
                echo "<tr class='tab_bg_2'>";
                   echo "<th>".AuthLDAP::getTypeName()."</th>";
-                  echo "<th>".__('TCP port', 'ldaptools')."</th>";
+                  echo "<th>".__('Flux TCP', 'ldaptools')."</th>";
                   echo "<th>".__('BaseDN', 'ldaptools')."</th>";
-                  echo "<th>".__('LDAP connect', 'ldaptools')."</th>";
+                  echo "<th>".__('LDAP URI', 'ldaptools')."</th>";
                   echo "<th>".__('Bind auth', 'ldaptools')."</th>";
                   echo "<th>".__('Generic search', 'ldaptools')."</th>";
                   echo "<th>".__('Filtered search', 'ldaptools')."</th>";
+                  echo "<th>".__('Attributes', 'ldaptools')."</th>";
                echo "</tr>";
             echo "</thead>";
             echo "<tbody>";
@@ -84,7 +78,7 @@ class PluginLdaptoolsTest extends CommonGLPI {
 
                echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
                echo '<td colspan="6"><i class="fas fa-spinner fa-pulse"></i></td>';
-               $ajax_url = Plugin::getWebDir('ldaptools')."/ajax/test.all.php";
+               $ajax_url = Plugin::getWebDir('ldaptools')."/ajax/test.php";
                echo Html::scriptBlock('
                   $(document).ready(function() {
                      $.ajax({

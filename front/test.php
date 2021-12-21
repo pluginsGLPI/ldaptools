@@ -29,9 +29,9 @@ Session::checkRight("config", UPDATE);
 Html::header(
     PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
     $_SERVER['PHP_SELF'],
-    "config",
+    "tools",
     "PluginLdaptoolsMenu",
-    "ldap"
+    "test"
 );
 
 PluginLdaptoolsTest::show();

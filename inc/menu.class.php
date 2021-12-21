@@ -46,4 +46,37 @@ class PluginLdaptoolsMenu extends CommonGLPI {
       return "fas fa-sign-in-alt";
    }
 
+   static function getMenuContent() {
+      $menu = [];
+
+      $base_dir = '/'.Plugin::getWebDir('ldaptools', false);
+
+      if (PluginLdaptoolsMenu::canUpdate()) {
+         $menu['title'] = self::getMenuName();
+         $menu['page']  = "$base_dir/front/menu.php";
+         $menu['icon']  = self::getIcon();
+
+         $link_text = "<span class='d-none d-xxl-block'>".
+                      PluginLdaptoolsMenu::getTypeName(Session::getPluralNumber()).
+                      "</span>";
+         $links =  [
+            "<i class='".PluginLdaptoolsMenu::getIcon()."'></i>$link_text"
+               => PluginLdaptoolsMenu::getSearchURL(false)
+         ];
+
+         $menu['options']['test'] = [
+            'title' => PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
+            'page'  => "$base_dir/front/test.php",
+            'icon'  => PluginLdaptoolsTest::getIcon(),
+            'links' => []
+         ];
+      }
+
+      if (count($menu)) {
+         return $menu;
+      }
+
+      return false;
+   }
+
 }

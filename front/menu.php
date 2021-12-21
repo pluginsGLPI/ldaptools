@@ -28,8 +28,9 @@ Session::checkRight("config", UPDATE);
 
 Html::header(__('LDAP Tools', 'ldaptools'),
    $_SERVER['PHP_SELF'],
-   'config',
-   'PluginLdaptoolsMenu'
+   'tools',
+   'PluginLdaptoolsMenu',
+   'menu'
 );
 
 if (!Toolbox::canUseLdap()) {

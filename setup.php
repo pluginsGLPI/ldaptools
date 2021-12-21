@@ -45,12 +45,16 @@ function plugin_init_ldaptools() {
 
    $PLUGIN_HOOKS['csrf_compliant']['ldaptools'] = true;
 
+   if (file_exists(__DIR__ . "/vendor/autoload.php")) {
+      require_once(__DIR__ . "/vendor/autoload.php");
+   }   
+
    if (Session::getLoginUserID()
          && $plugin->isActivated('ldaptools')
          && Session::haveRight("config", UPDATE)) {
 
       $PLUGIN_HOOKS['config_page']['ldaptools'] = 'front/menu.php';
-      $PLUGIN_HOOKS['menu_toadd']['ldaptools']['config'] = 'PluginLdaptoolsMenu';
+      $PLUGIN_HOOKS['menu_toadd']['ldaptools']['tools'] = 'PluginLdaptoolsMenu';
    }
 }
 

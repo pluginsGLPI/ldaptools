@@ -48,12 +48,14 @@ if (!$AuthLDAP->can($authldaps_id, READ)) {
 $AuthLDAP->getFromDB($authldaps_id);
 
 $hostname      = $AuthLDAP->getField('host');
-$port_num      = $AuthLDAP->getField('port');
+$port_num      = intval($AuthLDAP->getField('port'));
 $username      = $AuthLDAP->getField('rootdn');
 $password      = Toolbox::sodiumDecrypt($AuthLDAP->getField('rootdn_passwd'));
 $base_dn       = $AuthLDAP->getField('basedn');
 $login_field   = $AuthLDAP->getField('login_field');
+$use_tls       = $AuthLDAP->getField('use_tls');
 $filter        = Html::entity_decode_deep($AuthLDAP->getField('condition'));
+$search        = "(cn=*)";
 
 $use_bind = true;
 if ($AuthLDAP->isField('use_bind')) {
@@ -79,7 +81,7 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    } else {
       $host = $hostname;
    }
-   if (fsockopen($host, $port_num, $errno, $errstr, 1)) {
+   if (fsockopen($host, $port_num, $errno, $errstr, 5)) {
       echo '<span style="color: green;" id="ldap_test_port_'.$authldaps_id.'">';
          echo '<i class="far fa-thumbs-up"></i>';
          echo $host." (TCP/".$port_num.")";
@@ -110,22 +112,24 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_basedn_'.$authldaps_id.'">';
-         echo '<i class="far fa-thumbs-down"></i>';
+         echo '<i class="far fa-hand-point-left"></i>';
          echo "Fix previous.";
       echo '</span>';
+      $next = false;
    }
    echo "</td>";
 
    echo "<td>";
    if ($next) {
+
       if ($ldap = ldap_connect($hostname, $port_num)) {
 
          ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
          ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
          ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, 7);
-         ldap_set_option($ldap, LDAP_OPT_NETWORK_TIMEOUT, 1);
-         ldap_set_option($ldap, LDAP_OPT_TIMELIMIT, 1);
-         ldap_set_option($ldap, LDAP_OPT_SIZELIMIT, 1);
+         ldap_set_option($ldap, LDAP_OPT_NETWORK_TIMEOUT, 5);
+         ldap_set_option($ldap, LDAP_OPT_TIMELIMIT, 10);
+         ldap_set_option($ldap, LDAP_OPT_SIZELIMIT, 50);
 
          if (!empty($tls_certfile) && file_exists($tls_certfile)) {
             ldap_set_option(null, LDAP_OPT_X_TLS_CERTFILE, $tls_certfile);
@@ -135,20 +139,26 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
             ldap_set_option(null, LDAP_OPT_X_TLS_KEYFILE, $tls_keyfile);
          }
 
+         if ($use_tls) {
+            @ldap_start_tls($ldap);
+         }
+
          echo '<span style="color: green;" id="ldap_test_connect_'.$authldaps_id.'">';
-          echo '<i class="far fa-thumbs-up"></i>';
+            echo '<i class="far fa-thumbs-up"></i>';
          echo '</span>';
          $next = true;
       } else {
          echo '<span style="color: red;" id="ldap_test_connect_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-down"></i>';
-            echo ldap_error($ldap);
+            Html::showToolTip(
+               "Error number: " . ldap_errno($ldap) . "<br />
+               Error: " . ldap_err2str(ldap_errno($ldap))
+            );
          echo '</span>';
          $next = false;
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_connect_'.$authldaps_id.'">';
-         echo '<i class="far fa-thumbs-down"></i>';
+         echo '<i class="far fa-hand-point-left"></i>';
          echo "Fix previous.";
       echo '</span>';
       $next = false;
@@ -160,8 +170,11 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       $bind_result = ldap_bind($ldap, $username, $password);
       if (!$bind_result) {
          echo '<span style="color: red;" id="ldap_test_bind_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-down"></i>';
-            echo ldap_error($ldap);
+            echo "Could not bind";
+            Html::showToolTip(
+               "Error number: " . ldap_errno($ldap) . "<br />
+               Error: " . ldap_err2str(ldap_errno($ldap))
+            );
          echo '</span>';
          $next = false;
       } else {
@@ -173,42 +186,109 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    } else {
       if ($use_bind) {
          echo '<span style="color: red;" id="ldap_test_bind_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-down"></i>';
+            echo '<i class="far fa-hand-point-left"></i>';
             echo "Fix previous.";
          echo '</span>';
          $next = false;
       } else {
-         echo '<span style="color: green;" id="ldap_test_bind_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-up"></i>';
-            echo "&nbsp;(disabled)";
+         echo '<span style="color: orange;" id="ldap_test_bind_'.$authldaps_id.'">';
+            echo "Disabled";
+            Html::showToolTip(
+               "<p>Bind user / password authentication is disabled,
+               which means your LDAP server allows anonymous requests,
+               or authenticates with a key. If it's voluntary, don't worry.</p>
+               <p>If the following tests are in error,
+               you should check this authentication!
+               Maybe it's ultimately necessary ;)</p>"
+            );
          echo '</span>';
-         $next = true;
       }
    }
    echo "</td>";
 
    echo "<td>";
    if ($next) {
-      $results = @ldap_search($ldap, $base_dn, '(cn=*)', [$login_field], 0, 1);
+      $results = @ldap_search($ldap, $base_dn, $search, [], 0, 50);
       if (!$results) {
          echo '<span style="color: red;" id="ldap_test_search_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-down"></i>';
-            echo "Could not search: ".$search."<br />";
-            echo ldap_error($ldap);
+            Html::showToolTip(
+               "Error number: " . ldap_errno($ldap) . "<br />
+               Error: " . ldap_err2str(ldap_errno($ldap))
+            );
+            echo "Search error: ".$search;
          echo '</span>';
          $next = false;
       } else {
-         echo '<span style="color: green;" id="ldap_test_search_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-up"></i>';
-            $first = ldap_first_entry($ldap, $results);
-            $data = ldap_get_dn($ldap, $first);
-            echo "First entry: ".$data;
-         echo '</span>';
-         $next = true;
+         $count_entries = ldap_count_entries($ldap, $results);
+         if ($count_entries > 0) {
+            echo '<span style="color: green;" id="ldap_test_filter_'.$authldaps_id.'">';
+               echo '<i class="far fa-thumbs-up"></i>';
+               echo $count_entries." entries";
+               $entriesToolTip = '<span style="font-weight:bold;">First entry</span><br />';
+               $firtEntry = ldap_first_entry($ldap, $results);
+               $entriesToolTip .= ldap_get_dn($ldap, $firtEntry);
+               Html::showToolTip($entriesToolTip);
+            echo '</span>';
+            $next = true;
+         } else {
+            echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
+               echo '<i class="far fa-thumbs-down"></i>';
+               echo "No entry found";
+            echo '</span>';
+            $next = false;
+         }
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_search_'.$authldaps_id.'">';
-         echo '<i class="far fa-thumbs-down"></i>';
+         echo '<i class="far fa-hand-point-left"></i>';
+         echo "Fix previous.";
+      echo '</span>';
+      $next = false;
+   }
+   echo "</td>";
+
+   ldap_free_result($results);
+
+   echo "<td>";
+   if ($next) {
+
+      if (empty($filter)) {
+         $filter = $search;
+      }
+
+      $results = @ldap_search($ldap, $base_dn, $filter, [], 0, 50);
+      if (!$results) {
+         echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
+            Html::showToolTip(
+               "Error number: " . ldap_errno($ldap) . "<br />
+               Error: " . ldap_err2str(ldap_errno($ldap))
+            );
+            echo "Filter error: ".$filter;
+         echo '</span>';
+         $next = false;
+      } else {
+         $entries = ldap_get_entries($ldap, $results);
+         if ($count_entries > 0) {
+            echo '<span style="color: green;" id="ldap_test_filter_'.$authldaps_id.'">';
+               echo '<i class="far fa-thumbs-up"></i>';
+               echo $count_entries." entries";
+               $entriesToolTip = '<span style="font-weight:bold;">First entry</span><br />';
+               $firtEntry = ldap_first_entry($ldap, $results);
+               $entriesToolTip .= ldap_get_dn($ldap, $firtEntry);
+               Html::showToolTip($entriesToolTip);
+            echo '</span>';
+            $next = true;
+         } else {
+            echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
+               echo '<i class="far fa-thumbs-down"></i>';
+               echo "No entry found: ".$filter."<br />";
+            echo '</span>';
+            $next = false;
+         }
+      }
+   } else {
+      echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
+         echo '<i class="far fa-hand-point-left"></i>';
          echo "Fix previous.";
       echo '</span>';
       $next = false;
@@ -217,29 +297,36 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
 
    echo "<td>";
    if ($next) {
-      $results = @ldap_search($ldap, $base_dn, $filter, [$login_field], 0, 1);
-      if (!$results) {
-         echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-down"></i>';
-            echo "Could not filter: ".$filter."<br />";
-            echo ldap_error($ldap);
+      $first = ldap_first_entry($ldap, $results);
+      $attrs = ldap_get_attributes($ldap, $first);
+      if (!$attrs) {
+         echo '<span style="color: red;" id="ldap_test_attributes_'.$authldaps_id.'">';
+            echo "Attributes error ";
+            Html::showToolTip("<p>Error number: " . ldap_errno($ldap) . "</p>
+               <p>Error: " . ldap_err2str(ldap_errno($ldap)) . "</p>"
+            );
          echo '</span>';
          $next = false;
       } else {
-         echo '<span style="color: green;" id="ldap_test_filter_'.$authldaps_id.'">';
+         echo '<span style="color: green;" id="ldap_test_attributes_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-up"></i>';
-            $first = ldap_first_entry($ldap, $results);
-            $data = ldap_get_dn($ldap, $first);
-            echo "First entry: ".$data;
+            $attrsToolTip = '';
+            for ($i=0; $i < $attrs["count"]; $i++) {
+               $attrsToolTip .= $attrs[$i] . "<br />";
+            }
+            echo "&nbsp;";
+            Html::showToolTip($attrsToolTip);
          echo '</span>';
          $next = true;
       }
    } else {
-      echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
-         echo '<i class="far fa-thumbs-down"></i>';
+      echo '<span style="color: red;" id="ldap_test_attributes_'.$authldaps_id.'">';
+         echo '<i class="far fa-hand-point-left"></i>';
          echo "Fix previous.";
       echo '</span>';
       $next = false;
    }
    echo "</td>";
 echo "</tr>";
+
+ldap_free_result($results);

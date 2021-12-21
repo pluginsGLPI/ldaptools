@@ -31,7 +31,7 @@ Html::header(
     $_SERVER['PHP_SELF'],
     "config",
     "PluginLdaptoolsMenu",
-    "PluginLdaptoolsTest"
+    "ldap"
 );
 
 PluginLdaptoolsTest::show();

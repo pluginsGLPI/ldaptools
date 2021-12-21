@@ -71,7 +71,8 @@ class PluginLdaptoolsTest extends CommonGLPI {
                   echo "<th>".__('BaseDN', 'ldaptools')."</th>";
                   echo "<th>".__('LDAP connect', 'ldaptools')."</th>";
                   echo "<th>".__('Bind auth', 'ldaptools')."</th>";
-                  echo "<th>".__('Search', 'ldaptools')."</th>";
+                  echo "<th>".__('Generic search', 'ldaptools')."</th>";
+                  echo "<th>".__('Filtered search', 'ldaptools')."</th>";
                echo "</tr>";
             echo "</thead>";
             echo "<tbody>";

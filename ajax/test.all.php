@@ -53,6 +53,7 @@ $username      = $AuthLDAP->getField('rootdn');
 $password      = Toolbox::sodiumDecrypt($AuthLDAP->getField('rootdn_passwd'));
 $base_dn       = $AuthLDAP->getField('basedn');
 $login_field   = $AuthLDAP->getField('login_field');
+$filter        = Html::entity_decode_deep($AuthLDAP->getField('condition'));
 
 $use_bind = true;
 if ($AuthLDAP->isField('use_bind')) {
@@ -98,19 +99,19 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       if (empty($base_dn)) {
          echo '<span style="color: red;" id="ldap_test_basedn_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-down"></i>';
-            echo "BaseDN ERROR: should not been empty!";
+            echo "BaseDN should not been empty!";
          echo '</span>';
+         $next = false;
       } else {
          echo '<span style="color: green;" id="ldap_test_basedn_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-up"></i>';
-            echo "BaseDN OK: ".$base_dn;
          echo '</span>';
          $next = true;
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_basedn_'.$authldaps_id.'">';
          echo '<i class="far fa-thumbs-down"></i>';
-         echo "Previous test error, please fix.";
+         echo "Fix previous.";
       echo '</span>';
    }
    echo "</td>";
@@ -119,7 +120,6 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    if ($next) {
       if ($ldap = ldap_connect($hostname, $port_num)) {
 
-         
          ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
          ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
          ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, 7);
@@ -137,21 +137,21 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
 
          echo '<span style="color: green;" id="ldap_test_connect_'.$authldaps_id.'">';
           echo '<i class="far fa-thumbs-up"></i>';
-          echo "Connect OK";
          echo '</span>';
          $next = true;
       } else {
          echo '<span style="color: red;" id="ldap_test_connect_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-down"></i>';
-            echo "Connect ERROR<br />";
             echo ldap_error($ldap);
          echo '</span>';
+         $next = false;
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_connect_'.$authldaps_id.'">';
          echo '<i class="far fa-thumbs-down"></i>';
-         echo "Previous test error, please fix.";
+         echo "Fix previous.";
       echo '</span>';
+      $next = false;
    }
    echo "</td>";
 
@@ -161,13 +161,12 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       if (!$bind_result) {
          echo '<span style="color: red;" id="ldap_test_bind_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-down"></i>';
-            echo "Bind ERROR:<br />";
             echo ldap_error($ldap);
          echo '</span>';
+         $next = false;
       } else {
          echo '<span style="color: green;" id="ldap_test_bind_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-up"></i>';
-            echo "Bind OK";
          echo '</span>';
          $next = true;
       }
@@ -175,13 +174,15 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       if ($use_bind) {
          echo '<span style="color: red;" id="ldap_test_bind_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-down"></i>';
-            echo "Previous test error, please fix.";
+            echo "Fix previous.";
          echo '</span>';
+         $next = false;
       } else {
          echo '<span style="color: green;" id="ldap_test_bind_'.$authldaps_id.'">';
-            echo '<i class="far fa-thumbs-down"></i>';
-            echo "Bind is specifically disabled.";
+            echo '<i class="far fa-thumbs-up"></i>';
+            echo "&nbsp;(disabled)";
          echo '</span>';
+         $next = true;
       }
    }
    echo "</td>";
@@ -195,20 +196,50 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
             echo "Could not search: ".$search."<br />";
             echo ldap_error($ldap);
          echo '</span>';
+         $next = false;
       } else {
          echo '<span style="color: green;" id="ldap_test_search_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-up"></i>';
-            echo "LDAP Search OK:<br />";
             $first = ldap_first_entry($ldap, $results);
             $data = ldap_get_dn($ldap, $first);
             echo "First entry: ".$data;
          echo '</span>';
+         $next = true;
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_search_'.$authldaps_id.'">';
          echo '<i class="far fa-thumbs-down"></i>';
-         echo "Previous test error, please fix.";
+         echo "Fix previous.";
       echo '</span>';
+      $next = false;
+   }
+   echo "</td>";
+
+   echo "<td>";
+   if ($next) {
+      $results = @ldap_search($ldap, $base_dn, $filter, [$login_field], 0, 1);
+      if (!$results) {
+         echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
+            echo '<i class="far fa-thumbs-down"></i>';
+            echo "Could not filter: ".$filter."<br />";
+            echo ldap_error($ldap);
+         echo '</span>';
+         $next = false;
+      } else {
+         echo '<span style="color: green;" id="ldap_test_filter_'.$authldaps_id.'">';
+            echo '<i class="far fa-thumbs-up"></i>';
+            $first = ldap_first_entry($ldap, $results);
+            $data = ldap_get_dn($ldap, $first);
+            echo "First entry: ".$data;
+         echo '</span>';
+         $next = true;
+      }
+   } else {
+      echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
+         echo '<i class="far fa-thumbs-down"></i>';
+         echo "Fix previous.";
+      echo '</span>';
+      $next = false;
    }
    echo "</td>";
 echo "</tr>";

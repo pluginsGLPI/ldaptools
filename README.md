@@ -18,4 +18,4 @@ Performs various tests on all the LDAP directories declared in GLPI:
 
 ## Screenshots
 
-![LDAP Test all result](docs/screenshots/test.all.fullresult)
+![LDAP Test all result](docs/screenshots/test.all.fullresult.png)

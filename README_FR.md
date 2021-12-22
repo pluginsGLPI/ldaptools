@@ -18,4 +18,4 @@ Effectue différents tests sur tous les annuaires LDAP déclarés dans GLPI :
 
 ## Screenshots
 
-![LDAP Test all result](docs/screenshots/test.all.fullresult)
+![LDAP Test all result](docs/screenshots/test.all.fullresult.png)

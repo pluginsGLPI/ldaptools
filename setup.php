@@ -1,28 +1,29 @@
 <?php
+
 /**
- * --------------------------------------------------------------------------
- * LICENSE
+ *  --------------------------------------------------------------------------
+ *  LICENSE
  *
- * This file is part of ldaptools.
+ *  This file is part of ldaptools.
  *
- * ldaptools is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  ldaptools is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * ldaptools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * --------------------------------------------------------------------------
- * @author    François Legastelois
- * @copyright Copyright (C) 2021-2022 by Teclib'.
- * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
- * @link      https://github.com/pluginsGLPI/ldaptools/
- * -------------------------------------------------------------------------
+ *  ldaptools is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  --------------------------------------------------------------------------
+ *  @author    François Legastelois
+ *  @copyright Copyright (C) 2021-2022 by Teclib'.
+ *  @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ *  @link      https://services.glpi-network.com
+ *  -------------------------------------------------------------------------
  */
 
-define('PLUGIN_LDAPTOOLS_VERSION', '1.0.0');
+define('PLUGIN_LDAPTOOLS_VERSION', '0.0.1');
 
 // Minimal GLPI version, inclusive
 define('PLUGIN_LDAPTOOLS_MIN_GLPI', '9.5.0');
@@ -69,9 +70,9 @@ function plugin_version_ldaptools() {
    return [
       'name'           => __('LDAP Tools', 'ldaptools'),
       'version'        => PLUGIN_LDAPTOOLS_VERSION,
-      'author'         => '<a href="http://www.teclib.com">teclib\'</a>',
+      'author'         => '<a href="https://services.glpi-network.com">teclib\'</a>',
       'license'        => 'GPLv3',
-      'homepage'       => 'https://github.com/pluginsGLPI/ldaptools',
+      'homepage'       => 'https://services.glpi-network.com',
       'requirements'   => [
          'glpi' => [
             'min' => PLUGIN_LDAPTOOLS_MIN_GLPI,

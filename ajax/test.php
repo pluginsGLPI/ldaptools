@@ -1,25 +1,26 @@
 <?php
+
 /**
- * --------------------------------------------------------------------------
- * LICENSE
+ *  --------------------------------------------------------------------------
+ *  LICENSE
  *
- * This file is part of ldaptools.
+ *  This file is part of ldaptools.
  *
- * ldaptools is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  ldaptools is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * ldaptools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * --------------------------------------------------------------------------
- * @author    François Legastelois
- * @copyright Copyright (C) 2021-2022 by Teclib'.
- * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
- * @link      https://github.com/pluginsGLPI/ldaptools/
- * -------------------------------------------------------------------------
+ *  ldaptools is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  --------------------------------------------------------------------------
+ *  @author    François Legastelois
+ *  @copyright Copyright (C) 2021-2022 by Teclib'.
+ *  @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ *  @link      https://services.glpi-network.com
+ *  -------------------------------------------------------------------------
  */
 
 $AJAX_INCLUDE = 1;
@@ -62,10 +63,12 @@ if ($AuthLDAP->isField('use_bind')) {
    $use_bind = $AuthLDAP->getField('use_bind');
 }
 
+$tls_certfile = NULL;
 if ($AuthLDAP->isField('tls_certfile')) {
    $tls_certfile = $AuthLDAP->getField('tls_certfile');
 }
 
+$tls_keyfile = NULL;
 if ($AuthLDAP->isField('tls_keyfile')) {
    $tls_keyfile = $AuthLDAP->getField('tls_keyfile');
 }
@@ -101,7 +104,7 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       if (empty($base_dn)) {
          echo '<span style="color: red;" id="ldap_test_basedn_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-down"></i>';
-            echo "BaseDN should not been empty!";
+            echo __('BaseDN should not been empty!', 'ldaptools');
          echo '</span>';
          $next = false;
       } else {
@@ -113,7 +116,7 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    } else {
       echo '<span style="color: red;" id="ldap_test_basedn_'.$authldaps_id.'">';
          echo '<i class="far fa-hand-point-left"></i>';
-         echo "Fix previous.";
+         echo __('Fix previous!', 'ldaptools');
       echo '</span>';
       $next = false;
    }
@@ -149,17 +152,18 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
          $next = true;
       } else {
          echo '<span style="color: red;" id="ldap_test_connect_'.$authldaps_id.'">';
-            Html::showToolTip(
-               "Error number: " . ldap_errno($ldap) . "<br />
-               Error: " . ldap_err2str(ldap_errno($ldap))
-            );
+            //TRANS: %s is the LDAP error number
+            $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+            //TRANS: %s is the LDAP error message
+            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            Html::showToolTip($toolTip);
          echo '</span>';
          $next = false;
       }
    } else {
       echo '<span style="color: red;" id="ldap_test_connect_'.$authldaps_id.'">';
          echo '<i class="far fa-hand-point-left"></i>';
-         echo "Fix previous.";
+         echo __('Fix previous!', 'ldaptools');
       echo '</span>';
       $next = false;
    }
@@ -170,11 +174,12 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       $bind_result = ldap_bind($ldap, $username, $password);
       if (!$bind_result) {
          echo '<span style="color: red;" id="ldap_test_bind_'.$authldaps_id.'">';
-            echo "Could not bind";
-            Html::showToolTip(
-               "Error number: " . ldap_errno($ldap) . "<br />
-               Error: " . ldap_err2str(ldap_errno($ldap))
-            );
+            echo __('Could not bind', 'ldaptools');
+            //TRANS: %s is the LDAP error number
+            $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+            //TRANS: %s is the LDAP error message
+            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            Html::showToolTip($toolTip);
          echo '</span>';
          $next = false;
       } else {
@@ -187,19 +192,18 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       if ($use_bind) {
          echo '<span style="color: red;" id="ldap_test_bind_'.$authldaps_id.'">';
             echo '<i class="far fa-hand-point-left"></i>';
-            echo "Fix previous.";
+            echo __('Fix previous!', 'ldaptools');
          echo '</span>';
          $next = false;
       } else {
          echo '<span style="color: orange;" id="ldap_test_bind_'.$authldaps_id.'">';
             echo "Disabled";
             Html::showToolTip(
-               "<p>Bind user / password authentication is disabled,
+               __("Bind user / password authentication is disabled,
                which means your LDAP server allows anonymous requests,
-               or authenticates with a key. If it's voluntary, don't worry.</p>
-               <p>If the following tests are in error,
-               you should check this authentication!
-               Maybe it's ultimately necessary ;)</p>"
+               or authenticates with a key. If it's voluntary, don't worry.<br />
+               If the following tests are in error, you should check this authentication!
+               Maybe it's ultimately necessary ;)", 'ldaptools')
             );
          echo '</span>';
       }
@@ -211,11 +215,13 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       $results = @ldap_search($ldap, $base_dn, $search, [], 0, 50);
       if (!$results) {
          echo '<span style="color: red;" id="ldap_test_search_'.$authldaps_id.'">';
-            Html::showToolTip(
-               "Error number: " . ldap_errno($ldap) . "<br />
-               Error: " . ldap_err2str(ldap_errno($ldap))
-            );
-            echo "Search error: ".$search;
+            //TRANS: %s is the LDAP error number
+            $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+            //TRANS: %s is the LDAP error message
+            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            Html::showToolTip($toolTip);
+            //TRANS: %s is the search content
+            echo sprintf(__('Search error: %s', 'ldaptools'), $search);
          echo '</span>';
          $next = false;
       } else {
@@ -233,7 +239,8 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
          } else {
             echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
                echo '<i class="far fa-thumbs-down"></i>';
-               echo "No entry found";
+               //TRANS: %s is the LDAP search content
+               echo sprintf(__('No entry found: %s', 'ldaptools'), $search);
             echo '</span>';
             $next = false;
          }
@@ -241,7 +248,7 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    } else {
       echo '<span style="color: red;" id="ldap_test_search_'.$authldaps_id.'">';
          echo '<i class="far fa-hand-point-left"></i>';
-         echo "Fix previous.";
+         echo __('Fix previous!', 'ldaptools');
       echo '</span>';
       $next = false;
    }
@@ -259,11 +266,13 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       $results = @ldap_search($ldap, $base_dn, $filter, [], 0, 50);
       if (!$results) {
          echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
-            Html::showToolTip(
-               "Error number: " . ldap_errno($ldap) . "<br />
-               Error: " . ldap_err2str(ldap_errno($ldap))
-            );
-            echo "Filter error: ".$filter;
+            //TRANS: %s is the LDAP error number
+            $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+            //TRANS: %s is the LDAP error message
+            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            Html::showToolTip($toolTip);
+            //TRANS: %s is the LDAP search filter content
+            echo sprintf(__('Filter error: %s', 'ldaptools'), $filter);
          echo '</span>';
          $next = false;
       } else {
@@ -271,8 +280,9 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
          if ($count_entries > 0) {
             echo '<span style="color: green;" id="ldap_test_filter_'.$authldaps_id.'">';
                echo '<i class="far fa-thumbs-up"></i>';
-               echo $count_entries." entries";
-               $entriesToolTip = '<span style="font-weight:bold;">First entry</span><br />';
+               //TRANS: %s is the LDAP count entries returned
+               echo sprintf(__('%s entries', 'ldaptools'), $count_entries);
+               $entriesToolTip = '<span style="font-weight:bold;">'.__("First entry", "ldaptools").'</span><br />';
                $firtEntry = ldap_first_entry($ldap, $results);
                $entriesToolTip .= ldap_get_dn($ldap, $firtEntry);
                Html::showToolTip($entriesToolTip);
@@ -281,7 +291,8 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
          } else {
             echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
                echo '<i class="far fa-thumbs-down"></i>';
-               echo "No entry found: ".$filter."<br />";
+               //TRANS: %s is the LDAP search filter content
+               echo sprintf(__('No entry found: %s', 'ldaptools'), $filter);
             echo '</span>';
             $next = false;
          }
@@ -289,7 +300,7 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    } else {
       echo '<span style="color: red;" id="ldap_test_filter_'.$authldaps_id.'">';
          echo '<i class="far fa-hand-point-left"></i>';
-         echo "Fix previous.";
+         echo __('Fix previous!', 'ldaptools');
       echo '</span>';
       $next = false;
    }
@@ -301,20 +312,21 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
       $attrs = ldap_get_attributes($ldap, $first);
       if (!$attrs) {
          echo '<span style="color: red;" id="ldap_test_attributes_'.$authldaps_id.'">';
-            echo "Attributes error ";
-            Html::showToolTip("<p>Error number: " . ldap_errno($ldap) . "</p>
-               <p>Error: " . ldap_err2str(ldap_errno($ldap)) . "</p>"
-            );
+            //TRANS: %s is the LDAP error number
+            $toolTip = sprintf(__('Error number: %s'), ldap_errno($ldap));
+            //TRANS: %s is the LDAP error message
+            $toolTip.= sprintf(__('Error message: %s'), ldap_err2str(ldap_errno($ldap)));
+            Html::showToolTip($toolTip);
+            echo __('Get attributes error', 'ldaptools');
          echo '</span>';
          $next = false;
       } else {
          echo '<span style="color: green;" id="ldap_test_attributes_'.$authldaps_id.'">';
             echo '<i class="far fa-thumbs-up"></i>';
-            $attrsToolTip = '';
+            $attrsToolTip = '<span style="font-weight:bold;">'.__("Available attributes", "ldaptools").'</span><br />';
             for ($i=0; $i < $attrs["count"]; $i++) {
                $attrsToolTip .= $attrs[$i] . "<br />";
             }
-            echo "&nbsp;";
             Html::showToolTip($attrsToolTip);
          echo '</span>';
          $next = true;
@@ -322,7 +334,7 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    } else {
       echo '<span style="color: red;" id="ldap_test_attributes_'.$authldaps_id.'">';
          echo '<i class="far fa-hand-point-left"></i>';
-         echo "Fix previous.";
+         echo __('Fix previous!', 'ldaptools');
       echo '</span>';
       $next = false;
    }

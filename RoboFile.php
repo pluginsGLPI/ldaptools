@@ -23,18 +23,9 @@
  *  -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+require_once 'vendor/autoload.php';
 
-Session::checkRight("config", UPDATE);
-
-Html::header(
-    PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
-    $_SERVER['PHP_SELF'],
-    "tools",
-    "PluginLdaptoolsMenu",
-    "test"
-);
-
-PluginLdaptoolsTest::show();
-
-Html::footer();
+class RoboFile extends Glpi\Tools\RoboFile
+{
+   //Own plugin's robo stuff
+}

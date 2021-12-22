@@ -1,0 +1,132 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-22 17:12+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. TRANS: %s is the LDAP count entries returned
+#: ajax/test.php:284
+#, php-format
+msgid "%s entries"
+msgstr ""
+
+#: inc/test.class.php:70
+msgid "Attributes"
+msgstr ""
+
+#: ajax/test.php:326
+msgid "Available attributes"
+msgstr ""
+
+#: inc/test.class.php:65
+msgid "BaseDN"
+msgstr ""
+
+#: ajax/test.php:107
+msgid "BaseDN should not been empty!"
+msgstr ""
+
+#: inc/test.class.php:67
+msgid "Bind auth"
+msgstr ""
+
+#: ajax/test.php:202
+msgid ""
+"Bind user / password authentication is disabled,\n"
+"               which means your LDAP server allows anonymous requests,\n"
+"               or authenticates with a key. If it's voluntary, don't worry."
+"<br />\n"
+"               If the following tests are in error, you should check this "
+"authentication!\n"
+"               Maybe it's ultimately necessary ;)"
+msgstr ""
+
+#: ajax/test.php:177
+msgid "Could not bind"
+msgstr ""
+
+#. TRANS: %s is the LDAP error message
+#: ajax/test.php:158 ajax/test.php:181 ajax/test.php:221 ajax/test.php:272
+#, php-format
+msgid "Error message: %s"
+msgstr ""
+
+#. TRANS: %s is the LDAP error number
+#: ajax/test.php:156 ajax/test.php:179 ajax/test.php:219 ajax/test.php:270
+#, php-format
+msgid "Error number: %s"
+msgstr ""
+
+#. TRANS: %s is the LDAP search filter content
+#: ajax/test.php:275
+#, php-format
+msgid "Filter error: %s"
+msgstr ""
+
+#: inc/test.class.php:69
+msgid "Filtered search"
+msgstr ""
+
+#: ajax/test.php:285
+msgid "First entry"
+msgstr ""
+
+#: ajax/test.php:119 ajax/test.php:166 ajax/test.php:195 ajax/test.php:251
+#: ajax/test.php:303 ajax/test.php:337
+msgid "Fix previous!"
+msgstr ""
+
+#: inc/test.class.php:68
+msgid "Generic search"
+msgstr ""
+
+#: ajax/test.php:320
+msgid "Get attributes error"
+msgstr ""
+
+#: inc/test.class.php:31 inc/test.class.php:35
+msgid "LDAP Test"
+msgstr ""
+
+#: inc/menu.class.php:31 inc/menu.class.php:35 setup.php:71 front/menu.php:30
+#: front/menu.php:46
+msgid "LDAP Tools"
+msgstr ""
+
+#: inc/test.class.php:66
+msgid "LDAP URI"
+msgstr ""
+
+#. TRANS: %s is the LDAP search content
+#. TRANS: %s is the LDAP search filter content
+#: ajax/test.php:243 ajax/test.php:295
+#, php-format
+msgid "No entry found: %s"
+msgstr ""
+
+#: inc/test.class.php:43
+msgid "Performs various tests on all the LDAP directories declared in GLPI."
+msgstr ""
+
+#. TRANS: %s is the search content
+#: ajax/test.php:224
+#, php-format
+msgid "Search error: %s"
+msgstr ""
+
+#: inc/test.class.php:64
+msgid "TCP stream"
+msgstr ""

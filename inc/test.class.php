@@ -1,25 +1,26 @@
 <?php
+
 /**
- * --------------------------------------------------------------------------
- * LICENSE
+ *  --------------------------------------------------------------------------
+ *  LICENSE
  *
- * This file is part of ldaptools.
+ *  This file is part of ldaptools.
  *
- * ldaptools is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ *  ldaptools is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * ldaptools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * --------------------------------------------------------------------------
- * @author    François Legastelois
- * @copyright Copyright (C) 2021-2022 by Teclib'.
- * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
- * @link      https://github.com/pluginsGLPI/ldaptools/
- * -------------------------------------------------------------------------
+ *  ldaptools is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  --------------------------------------------------------------------------
+ *  @author    François Legastelois
+ *  @copyright Copyright (C) 2021-2022 by Teclib'.
+ *  @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ *  @link      https://services.glpi-network.com
+ *  -------------------------------------------------------------------------
  */
 
 class PluginLdaptoolsTest extends CommonGLPI {
@@ -60,7 +61,7 @@ class PluginLdaptoolsTest extends CommonGLPI {
             echo "<thead>";
                echo "<tr class='tab_bg_2'>";
                   echo "<th>".AuthLDAP::getTypeName()."</th>";
-                  echo "<th>".__('Flux TCP', 'ldaptools')."</th>";
+                  echo "<th>".__('TCP stream', 'ldaptools')."</th>";
                   echo "<th>".__('BaseDN', 'ldaptools')."</th>";
                   echo "<th>".__('LDAP URI', 'ldaptools')."</th>";
                   echo "<th>".__('Bind auth', 'ldaptools')."</th>";

@@ -1,0 +1,139 @@
+# English translations for PACKAGE package.
+# Copyright (C) 2021 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-22 17:12+0100\n"
+"PO-Revision-Date: 2021-12-22 17:12+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. TRANS: %s is the LDAP count entries returned
+#: ajax/test.php:284
+#, php-format
+msgid "%s entries"
+msgstr "%s entries"
+
+#: inc/test.class.php:70
+msgid "Attributes"
+msgstr "Attributes"
+
+#: ajax/test.php:326
+msgid "Available attributes"
+msgstr "Available attributes"
+
+#: inc/test.class.php:65
+msgid "BaseDN"
+msgstr "BaseDN"
+
+#: ajax/test.php:107
+msgid "BaseDN should not been empty!"
+msgstr "BaseDN should not been empty!"
+
+#: inc/test.class.php:67
+msgid "Bind auth"
+msgstr "Bind auth"
+
+#: ajax/test.php:202
+msgid ""
+"Bind user / password authentication is disabled,\n"
+"               which means your LDAP server allows anonymous requests,\n"
+"               or authenticates with a key. If it's voluntary, don't worry."
+"<br />\n"
+"               If the following tests are in error, you should check this "
+"authentication!\n"
+"               Maybe it's ultimately necessary ;)"
+msgstr ""
+"Bind user / password authentication is disabled,\n"
+"               which means your LDAP server allows anonymous requests,\n"
+"               or authenticates with a key. If it's voluntary, don't worry."
+"<br />\n"
+"               If the following tests are in error, you should check this "
+"authentication!\n"
+"               Maybe it's ultimately necessary ;)"
+
+#: ajax/test.php:177
+msgid "Could not bind"
+msgstr "Could not bind"
+
+#. TRANS: %s is the LDAP error message
+#: ajax/test.php:158 ajax/test.php:181 ajax/test.php:221 ajax/test.php:272
+#, php-format
+msgid "Error message: %s"
+msgstr "Error message: %s"
+
+#. TRANS: %s is the LDAP error number
+#: ajax/test.php:156 ajax/test.php:179 ajax/test.php:219 ajax/test.php:270
+#, php-format
+msgid "Error number: %s"
+msgstr "Error number: %s"
+
+#. TRANS: %s is the LDAP search filter content
+#: ajax/test.php:275
+#, php-format
+msgid "Filter error: %s"
+msgstr "Filter error: %s"
+
+#: inc/test.class.php:69
+msgid "Filtered search"
+msgstr "Filtered search"
+
+#: ajax/test.php:285
+msgid "First entry"
+msgstr "First entry"
+
+#: ajax/test.php:119 ajax/test.php:166 ajax/test.php:195 ajax/test.php:251
+#: ajax/test.php:303 ajax/test.php:337
+msgid "Fix previous!"
+msgstr "Fix previous!"
+
+#: inc/test.class.php:68
+msgid "Generic search"
+msgstr "Generic search"
+
+#: ajax/test.php:320
+msgid "Get attributes error"
+msgstr "Get attributes error"
+
+#: inc/test.class.php:31 inc/test.class.php:35
+msgid "LDAP Test"
+msgstr "LDAP Test"
+
+#: inc/menu.class.php:31 inc/menu.class.php:35 setup.php:71 front/menu.php:30
+#: front/menu.php:46
+msgid "LDAP Tools"
+msgstr "LDAP Tools"
+
+#: inc/test.class.php:66
+msgid "LDAP URI"
+msgstr "LDAP URI"
+
+#. TRANS: %s is the LDAP search content
+#. TRANS: %s is the LDAP search filter content
+#: ajax/test.php:243 ajax/test.php:295
+#, php-format
+msgid "No entry found: %s"
+msgstr "No entry found: %s"
+
+#: inc/test.class.php:43
+msgid "Performs various tests on all the LDAP directories declared in GLPI."
+msgstr "Performs various tests on all the LDAP directories declared in GLPI."
+
+#. TRANS: %s is the search content
+#: ajax/test.php:224
+#, php-format
+msgid "Search error: %s"
+msgstr "Search error: %s"
+
+#: inc/test.class.php:64
+msgid "TCP stream"
+msgstr "TCP stream"

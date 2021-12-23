@@ -161,7 +161,7 @@ echo '<tr id="ldap_test_'.$authldaps_id.'">';
             //TRANS: %s is the LDAP error number
             $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
             //TRANS: %s is the LDAP error message
-            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            $toolTip.= "<br />".sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
             Html::showToolTip($toolTip);
          echo '</span>';
          $next = false;
@@ -184,7 +184,7 @@ echo '<tr id="ldap_test_'.$authldaps_id.'">';
             //TRANS: %s is the LDAP error number
             $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
             //TRANS: %s is the LDAP error message
-            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            $toolTip.= "<br />".sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
             Html::showToolTip($toolTip);
          echo '</span>';
          $next = false;
@@ -224,7 +224,7 @@ echo '<tr id="ldap_test_'.$authldaps_id.'">';
             //TRANS: %s is the LDAP error number
             $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
             //TRANS: %s is the LDAP error message
-            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            $toolTip.= "<br />".sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
             Html::showToolTip($toolTip);
             //TRANS: %s is the search content
             echo sprintf(__('Search error: %s', 'ldaptools'), $search);
@@ -273,7 +273,7 @@ echo '<tr id="ldap_test_'.$authldaps_id.'">';
             //TRANS: %s is the LDAP error number
             $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
             //TRANS: %s is the LDAP error message
-            $toolTip.= sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+            $toolTip.= "<br />".sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
             Html::showToolTip($toolTip);
             //TRANS: %s is the LDAP search filter content
             echo sprintf(__('Filter error: %s', 'ldaptools'), $filter);
@@ -319,7 +319,7 @@ echo '<tr id="ldap_test_'.$authldaps_id.'">';
             //TRANS: %s is the LDAP error number
             $toolTip = sprintf(__('Error number: %s'), ldap_errno($ldap));
             //TRANS: %s is the LDAP error message
-            $toolTip.= sprintf(__('Error message: %s'), ldap_err2str(ldap_errno($ldap)));
+            $toolTip.= "<br />".sprintf(__('Error message: %s'), ldap_err2str(ldap_errno($ldap)));
             Html::showToolTip($toolTip);
             echo __('Get attributes error', 'ldaptools');
          echo '</span>';

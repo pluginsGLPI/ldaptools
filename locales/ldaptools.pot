@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-22 17:12+0100\n"
+"POT-Creation-Date: 2021-12-23 10:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. TRANS: %s is the LDAP count entries returned
-#: ajax/test.php:284
+#: ajax/test.php:288
 #, php-format
 msgid "%s entries"
 msgstr ""
 
-#: inc/test.class.php:70
+#: inc/test.class.php:76
 msgid "Attributes"
 msgstr ""
 
-#: ajax/test.php:326
+#: ajax/test.php:330
 msgid "Available attributes"
 msgstr ""
 
@@ -35,7 +35,7 @@ msgstr ""
 msgid "BaseDN"
 msgstr ""
 
-#: ajax/test.php:107
+#: ajax/test.php:113
 msgid "BaseDN should not been empty!"
 msgstr ""
 
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Bind auth"
 msgstr ""
 
-#: ajax/test.php:202
+#: ajax/test.php:208
 msgid ""
 "Bind user / password authentication is disabled,\n"
 "               which means your LDAP server allows anonymous requests,\n"
@@ -54,46 +54,50 @@ msgid ""
 "               Maybe it's ultimately necessary ;)"
 msgstr ""
 
-#: ajax/test.php:177
+#: ajax/test.php:183
 msgid "Could not bind"
 msgstr ""
 
 #. TRANS: %s is the LDAP error message
-#: ajax/test.php:158 ajax/test.php:181 ajax/test.php:221 ajax/test.php:272
+#: ajax/test.php:164 ajax/test.php:187 ajax/test.php:227 ajax/test.php:276
 #, php-format
 msgid "Error message: %s"
 msgstr ""
 
 #. TRANS: %s is the LDAP error number
-#: ajax/test.php:156 ajax/test.php:179 ajax/test.php:219 ajax/test.php:270
+#: ajax/test.php:162 ajax/test.php:185 ajax/test.php:225 ajax/test.php:274
 #, php-format
 msgid "Error number: %s"
 msgstr ""
 
 #. TRANS: %s is the LDAP search filter content
-#: ajax/test.php:275
+#: ajax/test.php:279
 #, php-format
 msgid "Filter error: %s"
 msgstr ""
 
-#: inc/test.class.php:69
+#: inc/test.class.php:73
 msgid "Filtered search"
 msgstr ""
 
-#: ajax/test.php:285
+#: ajax/test.php:289
 msgid "First entry"
 msgstr ""
 
-#: ajax/test.php:119 ajax/test.php:166 ajax/test.php:195 ajax/test.php:251
-#: ajax/test.php:303 ajax/test.php:337
+#: ajax/test.php:125 ajax/test.php:172 ajax/test.php:201 ajax/test.php:257
+#: ajax/test.php:307 ajax/test.php:341
 msgid "Fix previous!"
 msgstr ""
 
-#: inc/test.class.php:68
+#: inc/test.class.php:70 inc/test.class.php:74
+msgid "Forced limit : 50 entries max."
+msgstr ""
+
+#: inc/test.class.php:69
 msgid "Generic search"
 msgstr ""
 
-#: ajax/test.php:320
+#: ajax/test.php:324
 msgid "Get attributes error"
 msgstr ""
 
@@ -112,7 +116,7 @@ msgstr ""
 
 #. TRANS: %s is the LDAP search content
 #. TRANS: %s is the LDAP search filter content
-#: ajax/test.php:243 ajax/test.php:295
+#: ajax/test.php:249 ajax/test.php:299
 #, php-format
 msgid "No entry found: %s"
 msgstr ""
@@ -122,7 +126,7 @@ msgid "Performs various tests on all the LDAP directories declared in GLPI."
 msgstr ""
 
 #. TRANS: %s is the search content
-#: ajax/test.php:224
+#: ajax/test.php:230
 #, php-format
 msgid "Search error: %s"
 msgstr ""

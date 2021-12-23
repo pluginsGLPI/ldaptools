@@ -65,8 +65,14 @@ class PluginLdaptoolsTest extends CommonGLPI {
                   echo "<th>".__('BaseDN', 'ldaptools')."</th>";
                   echo "<th>".__('LDAP URI', 'ldaptools')."</th>";
                   echo "<th>".__('Bind auth', 'ldaptools')."</th>";
-                  echo "<th>".__('Generic search', 'ldaptools')."</th>";
-                  echo "<th>".__('Filtered search', 'ldaptools')."</th>";
+                  echo "<th>";
+                     echo __('Generic search', 'ldaptools');
+                     Html::showToolTip(__('Forced limit : 50 entries max.', 'ldaptools'));
+                  echo "</th>";
+                  echo "<th>";
+                     echo __('Filtered search', 'ldaptools');
+                     Html::showToolTip(__('Forced limit : 50 entries max.', 'ldaptools'));
+                  echo "</th>";
                   echo "<th>".__('Attributes', 'ldaptools')."</th>";
                echo "</tr>";
             echo "</thead>";

@@ -51,7 +51,13 @@ $AuthLDAP->getFromDB($authldaps_id);
 $hostname      = $AuthLDAP->getField('host');
 $port_num      = intval($AuthLDAP->getField('port'));
 $username      = $AuthLDAP->getField('rootdn');
-$password      = Toolbox::sodiumDecrypt($AuthLDAP->getField('rootdn_passwd'));
+
+if (method_exists('GLPIKey', 'decrypt')) {
+   $password = (new GLPIKey())->decrypt($AuthLDAP->getField('rootdn_passwd'));
+} else {
+   $password = Toolbox::sodiumDecrypt($AuthLDAP->getField('rootdn_passwd'));
+}
+
 $base_dn       = $AuthLDAP->getField('basedn');
 $login_field   = $AuthLDAP->getField('login_field');
 $use_tls       = $AuthLDAP->getField('use_tls');
@@ -75,7 +81,7 @@ if ($AuthLDAP->isField('tls_keyfile')) {
 
 $next = false;
 
-echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
+echo '<tr id="ldap_test_'.$authldaps_id.'">';
    echo "<td>".$AuthLDAP->getLink()."</td>";
 
    echo "<td>";
@@ -254,8 +260,6 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    }
    echo "</td>";
 
-   ldap_free_result($results);
-
    echo "<td>";
    if ($next) {
 
@@ -340,5 +344,3 @@ echo '<tr id="ldap_test_'.$ldapServer['id'].'">';
    }
    echo "</td>";
 echo "</tr>";
-
-ldap_free_result($results);

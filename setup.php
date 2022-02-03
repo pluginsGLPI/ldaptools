@@ -52,10 +52,6 @@ function plugin_init_ldaptools() {
 
    $PLUGIN_HOOKS['csrf_compliant']['ldaptools'] = true;
 
-   if (file_exists(__DIR__ . "/vendor/autoload.php")) {
-      require_once(__DIR__ . "/vendor/autoload.php");
-   }   
-
    if (Session::getLoginUserID()
          && $plugin->isActivated('ldaptools')
          && Session::haveRight("config", UPDATE)) {

@@ -44,21 +44,25 @@ define('PLUGIN_LDAPTOOLS_ROOT', Plugin::getPhpDir('ldaptools'));
  *
  * @return void
  */
-function plugin_init_ldaptools() {
+function plugin_init_ldaptools()
+{
 
-   global $PLUGIN_HOOKS, $CFG_GLPI;
+    /** @var array $CFG_GLPI */
+    /** @var array $PLUGIN_HOOKS */
+    global $PLUGIN_HOOKS, $CFG_GLPI;
 
-   $plugin = new Plugin();
+    $plugin = new Plugin();
 
-   $PLUGIN_HOOKS['csrf_compliant']['ldaptools'] = true;
+    $PLUGIN_HOOKS['csrf_compliant']['ldaptools'] = true;
 
-   if (Session::getLoginUserID()
+    if (
+        Session::getLoginUserID()
          && $plugin->isActivated('ldaptools')
-         && Session::haveRight("config", UPDATE)) {
-
-      $PLUGIN_HOOKS['config_page']['ldaptools'] = 'front/menu.php';
-      $PLUGIN_HOOKS['menu_toadd']['ldaptools']['tools'] = 'PluginLdaptoolsMenu';
-   }
+         && Session::haveRight("config", UPDATE)
+    ) {
+        $PLUGIN_HOOKS['config_page']['ldaptools'] = 'front/menu.php';
+        $PLUGIN_HOOKS['menu_toadd']['ldaptools']['tools'] = 'PluginLdaptoolsMenu';
+    }
 }
 
 
@@ -68,18 +72,19 @@ function plugin_init_ldaptools() {
  *
  * @return array
  */
-function plugin_version_ldaptools() {
-   return [
-      'name'           => __('LDAP Tools', 'ldaptools'),
-      'version'        => PLUGIN_LDAPTOOLS_VERSION,
-      'author'         => '<a href="https://services.glpi-network.com">teclib\'</a>',
-      'license'        => 'GPLv3',
-      'homepage'       => 'https://services.glpi-network.com',
-      'requirements'   => [
-         'glpi' => [
-            'min' => PLUGIN_LDAPTOOLS_MIN_GLPI,
-            'max' => PLUGIN_LDAPTOOLS_MAX_GLPI,
-         ]
-      ]
-   ];
+function plugin_version_ldaptools()
+{
+    return [
+        'name'           => __('LDAP Tools', 'ldaptools'),
+        'version'        => PLUGIN_LDAPTOOLS_VERSION,
+        'author'         => '<a href="https://services.glpi-network.com">teclib\'</a>',
+        'license'        => 'GPLv3',
+        'homepage'       => 'https://services.glpi-network.com',
+        'requirements'   => [
+            'glpi' => [
+                'min' => PLUGIN_LDAPTOOLS_MIN_GLPI,
+                'max' => PLUGIN_LDAPTOOLS_MAX_GLPI,
+            ]
+        ]
+    ];
 }

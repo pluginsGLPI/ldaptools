@@ -29,61 +29,66 @@
  * -------------------------------------------------------------------------
  */
 
-class PluginLdaptoolsMenu extends CommonGLPI {
+class PluginLdaptoolsMenu extends CommonGLPI
+{
+    public static $rightname = 'config';
 
-   static $rightname = 'config';
+    public static function getTypeName($nb = 0)
+    {
+        return __('LDAP Tools', 'ldaptools');
+    }
 
-   public static function getTypeName($nb = 0) {
-      return __('LDAP Tools', 'ldaptools');
-   }
+    public static function getMenuName()
+    {
+        return __('LDAP Tools', 'ldaptools');
+    }
 
-   public static function getMenuName() {
-      return __('LDAP Tools', 'ldaptools');
-   }
+    public static function canView()
+    {
+        return Config::canView();
+    }
 
-   public static function canView() {
-      return Config::canView();
-   }
+    public static function canUpdate()
+    {
+        return Config::canUpdate();
+    }
 
-   public static function canUpdate() {
-      return Config::canUpdate();
-   }
+    public static function getIcon()
+    {
+        return "fas fa-sign-in-alt";
+    }
 
-   public static function getIcon() {
-      return "fas fa-sign-in-alt";
-   }
+    public static function getMenuContent()
+    {
+        $menu = [];
 
-   static function getMenuContent() {
-      $menu = [];
+        $base_dir = '/' . Plugin::getWebDir('ldaptools', false);
 
-      $base_dir = '/'.Plugin::getWebDir('ldaptools', false);
+        if (PluginLdaptoolsMenu::canUpdate()) {
+            $menu['title'] = self::getMenuName();
+            $menu['page']  = "$base_dir/front/menu.php";
+            $menu['icon']  = self::getIcon();
 
-      if (PluginLdaptoolsMenu::canUpdate()) {
-         $menu['title'] = self::getMenuName();
-         $menu['page']  = "$base_dir/front/menu.php";
-         $menu['icon']  = self::getIcon();
-
-         $link_text = "<span class='d-none d-xxl-block'>".
-                      PluginLdaptoolsMenu::getTypeName(Session::getPluralNumber()).
+            $link_text = "<span class='d-none d-xxl-block'>" .
+                      PluginLdaptoolsMenu::getTypeName(Session::getPluralNumber()) .
                       "</span>";
-         $links =  [
-            "<i class='".PluginLdaptoolsMenu::getIcon()."'></i>$link_text"
+            $links =  [
+                "<i class='" . PluginLdaptoolsMenu::getIcon() . "'></i>$link_text"
                => PluginLdaptoolsMenu::getSearchURL(false)
-         ];
+            ];
 
-         $menu['options']['test'] = [
-            'title' => PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
-            'page'  => "$base_dir/front/test.php",
-            'icon'  => PluginLdaptoolsTest::getIcon(),
-            'links' => []
-         ];
-      }
+            $menu['options']['test'] = [
+                'title' => PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
+                'page'  => "$base_dir/front/test.php",
+                'icon'  => PluginLdaptoolsTest::getIcon(),
+                'links' => []
+            ];
+        }
 
-      if (count($menu)) {
-         return $menu;
-      }
+        if (count($menu)) {
+            return $menu;
+        }
 
-      return false;
-   }
-
+        return false;
+    }
 }

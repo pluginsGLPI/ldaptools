@@ -29,7 +29,7 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
 Session::checkRight("config", UPDATE);
 

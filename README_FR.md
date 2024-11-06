@@ -6,7 +6,7 @@ Ce plugin offre plusieurs outils en lien avec les annuaires LDAP déclarés dans
 
 ## Premier outil : LDAP test des configurations
 
-Effectue différents tests sur tous les annuaires LDAP déclarés dans GLPI :
+Effectue différents tests sur tous les annuaires LDAP (et réplicats) déclarés dans GLPI :
 
 1. test si le flux TCP est ouvert entre GLPI et le hostname/port du serveur LDAP
 2. vérifie que le champ "BaseDN" est correctement rempli

@@ -92,32 +92,45 @@ class PluginLdaptoolsTest extends CommonGLPI
             echo "</thead>";
             echo "<tbody>";
 
-        foreach (AuthLDAP::getLdapServers() as $ldapServer) {
-            $AuthLDAP = new AuthLDAP();
-            $AuthLDAP->getFromDB($ldapServer['id']);
+        $ldaps_map = array_map(function ($ldap_master) {
+            return [
+                "master" => $ldap_master,
+                "replicat" => AuthLDAP::getAllReplicateForAMaster($ldap_master['id'])
+            ];
+        }, AuthLDAP::getLdapServers());
 
-            echo '<tr id="ldap_test_' . $ldapServer['id'] . '">';
+        foreach ($ldaps_map as $ldap_items) {
+            $ldap_master = $ldap_items["master"];
+            self::addRow($ldap_master);
+            foreach ($ldap_items["replicat"] as $ldap_replicat) {
+                self::addRow($ldap_master, $ldap_replicat);
+            }
+        }
+        echo "</tbody>";
+        echo "</table>";
+        echo "</div>";
+    }
+
+    private static function addRow(array $ldap_master, array $ldap_replicat = ["id" => 0])
+    {
+        $ajax_url = Plugin::getWebDir('ldaptools') . "/ajax/test.php";
+        echo '<tr id="ldap_test_' . $ldap_master["id"] . '_' . $ldap_replicat["id"] . '">';
             echo '<td colspan="6"><i class="fas fa-spinner fa-pulse"></i></td>';
-            $ajax_url = Plugin::getWebDir('ldaptools') . "/ajax/test.php";
             echo Html::scriptBlock('
-                  $(document).ready(function() {
-                     $.ajax({
+                $(document).ready(function() {
+                    $.ajax({
                         type: "GET",
                         url: "' . $ajax_url . '",
                         data: {
-                           authldaps_id: "' . $ldapServer['id'] . '"
+                            authldaps_id: "' . $ldap_master["id"] . '",
+                            authldapreplicates_id: "' . $ldap_replicat["id"] . '"
                         },
                         success: function(data){
-                           $("[id=ldap_test_' . $ldapServer['id'] . ']").replaceWith(data);
+                            $("[id=ldap_test_' . $ldap_master["id"] . '_' . $ldap_replicat["id"] . ']").replaceWith(data);
                         },
-                     });
-                  });
-               ');
-            echo "</tr>";
-        }
-
-            echo "</tbody>";
-         echo "</table>";
-        echo "</div>";
+                    });
+                });
+            ');
+        echo "</tr>";
     }
 }

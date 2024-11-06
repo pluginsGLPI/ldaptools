@@ -6,7 +6,7 @@ This plugin offers several tools related to LDAP directories declared in GLPI.
 
 ## First tool : LDAP configurations tests
 
-Performs various tests on all the LDAP directories declared in GLPI:
+Performs various tests on all LDAP directories (and replicates) declared in GLPI :
 
 1. test if TCP stream is opened from GLPI to LDAP server hostname / port
 2. check is "BaseDN" field is filled in correctly

@@ -41,42 +41,6 @@ Html::header(
     'menu'
 );
 
-if (!Toolbox::canUseLdap()) {
-    echo "<div class='center warning' style='width: 40%; margin: auto;'>";
-    echo "<i class='fa fa-exclamation-triangle fa-3x'></i>";
-    echo "<p>" . _x('error', __("The LDAP extension of your PHP parser isn't installed")) . "</p>";
-    echo "</div>";
-} else {
-    echo "<div class='center'>";
-      echo "<table class='tab_cadre'>";
-         echo "<thead>";
-            echo "<th>" . __('LDAP Tools', 'ldaptools') . "</th>";
-            echo "<th>" . __('Comment') . "</th>";
-         echo "</thead>";
-         echo "<tbody>";
-
-    foreach (glob(PLUGIN_LDAPTOOLS_ROOT . '/inc/*') as $filepath) {
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-               $classname = 'PluginLdaptools' . ucfirst($matches[1]);
-            if (method_exists($classname, 'getLink')) {
-                echo "<tr>";
-                echo "<td>" . Html::link(
-                    _x('action', $classname::getTypeName(), 'ldaptools'),
-                    $classname::getLink()
-                ) . "</td>";
-                if (method_exists($classname, 'getComment')) {
-                    echo "<td>" . $classname::getComment() . "</td>";
-                } else {
-                     echo "<td>" . __('No comments') . "</td>";
-                }
-                   echo "</tr>";
-            }
-        }
-    }
-
-         echo "</tbody>";
-      echo "</table>";
-    echo "</div>";
-}
+PluginLdaptoolsMenu::showCentralPage();
 
 Html::footer();

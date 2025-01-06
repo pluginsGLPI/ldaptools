@@ -29,6 +29,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+
 class PluginLdaptoolsMenu extends CommonGLPI
 {
     public static $rightname = 'config';
@@ -90,5 +92,31 @@ class PluginLdaptoolsMenu extends CommonGLPI
         }
 
         return false;
+    }
+
+    public static function showCentralPage()
+    {
+        $filepaths = [];
+        if (Toolbox::canUseLdap()) {
+            foreach (glob(PLUGIN_LDAPTOOLS_ROOT . '/inc/*') as $filepath) {
+                if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
+                    $filepaths[$filepath] = [];
+                    $classname = 'PluginLdaptools' . ucfirst($matches[1]);
+                    if (method_exists($classname, 'getLink')) {
+                        $filepaths[$filepath]['link'] = $classname::getLink();
+                        $filepaths[$filepath]['name'] = $classname::getTypeName();
+                        if (method_exists($classname, 'getComment')) {
+                            $filepaths[$filepath]['comment'] = $classname::getComment();
+                        } else {
+                            $filepaths[$filepath]['comment'] = __('No comments');
+                        }
+                    }
+                }
+            }
+        }
+        TemplateRenderer::getInstance()->display('@ldaptools/menu.html.twig', [
+            'can_use' => Toolbox::canUseLdap(),
+            'filepaths' => $filepaths
+        ]);
     }
 }

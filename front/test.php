@@ -41,6 +41,6 @@ Html::header(
     "test"
 );
 
-PluginLdaptoolsTest::show();
+PluginLdaptoolsTest::showResult();
 
 Html::footer();

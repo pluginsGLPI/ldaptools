@@ -1,0 +1,93 @@
+{#
+ # -------------------------------------------------------------------------
+ # ldaptools plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of ldaptools.
+ #
+ # ldaptools is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # ldaptools is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with ldaptools. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @author    François Legastelois
+ # @copyright Copyright (C) 2021-2022 by Teclib'.
+ # @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://services.glpi-network.com
+ # -------------------------------------------------------------------------
+ #}
+
+ <div class="center">
+    <table border="0" class="tab_cadrehov">
+        <thead>
+            <tr class="tab_bg_2">
+                <th>{{ __('LDAP', 'ldaptools') }}</th>
+                <th>{{ __('TCP stream', 'ldaptools') }}</th>
+                <th>{{ __('BaseDN', 'ldaptools') }}</th>
+                <th>{{ __('LDAP URI', 'ldaptools') }}</th>
+                <th>{{ __('Bind auth', 'ldaptools') }}</th>
+                <th>
+                    {{ __('Generic search', 'ldaptools') }}
+                    {{ call('Html::showToolTip', ['Forced limit : 50 entries max.', 'ldaptools']) }}
+                </th>
+                <th>
+                    {{ __('Filtered search', 'ldaptools') }}
+                    {{ call('Html::showToolTip', ['Forced limit : 50 entries max.', 'ldaptools'])}}
+                </th>
+                <th>{{ __('Attributes', 'ldaptools') }}</th>
+            </tr>
+        </thead>
+         <tbody>
+            {% for ldap_items in ldap_servers %}
+                <tr id="ldap_test_{{ ldap_items.master.id }}_0">
+                    <td colspan="6"><i class="fas fa-spinner fa-pulse"></i></td>
+                </tr>
+                {% for ldap_replicat in ldap_items.replicat %}
+                    <tr id="ldap_test_{{ ldap_items.master.id }}_{{ ldap_replicat.id }}">
+                        <td colspan="6"><i class="fas fa-spinner fa-pulse"></i></td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    $(document).ready(() => {
+        const ldapServers = '{{ ldap_servers|json_encode|raw }}';
+        const ldapServersObject = JSON.parse(ldapServers);
+        Object.values(ldapServersObject).forEach(ldapItems => {
+            executeAjax(ldapItems.master);
+            ldapItems.replicat.forEach(ldapReplicat => {
+                executeAjax(ldapItems.master, ldapReplicat);
+            });
+        });
+    })
+
+    function executeAjax(ldap_master, ldap_replicat = {"id": 0}) {
+        const ajax_url = "{{ call('Plugin::getWebDir', ['ldaptools']) }}/ajax/test.php";
+        $.ajax({
+            type: "GET",
+            url: ajax_url,
+            data: {
+                authldaps_id: ldap_master.id,
+                authldapreplicates_id: ldap_replicat.id
+            },
+            success: function(data){
+                $(`[id=ldap_test_${ldap_master.id}_${ldap_replicat.id}]`).replaceWith(data);
+            },
+        });
+    }
+
+</script>

@@ -99,9 +99,9 @@ $next = false;
 
 echo '<tr id="ldap_test_' . $authldaps_id . '_' . $authldapreplicates_id . '">';
 if ($is_replicat) {
-    echo "<td><i class='ti ti-copy mr-2 pl-4'></i>" . $authreplicat_ldap->getField('name') . "</td>";
+    echo "<td><i class='ti ti-copy mr-2 m-2 pl-4'></i>" . $authreplicat_ldap->getField('name') . "</td>";
 } else {
-    echo "<td><i class='ti ti-crown mr-2'></i>" . $AuthLDAP->getLink() . "</td>";
+    echo "<td><i class='ti ti-crown mr-2 m-2'></i>" . $AuthLDAP->getLink() . "</td>";
 }
 
    echo "<td>";
@@ -112,13 +112,13 @@ if (preg_match_all("/(ldap:\/\/|ldaps:\/\/)(.*)/", $hostname, $matches)) {
 }
 if (fsockopen($host, $port_num, $errno, $errstr, 5)) {
     echo '<span style="color: green;" id="ldap_test_port_' . $authldaps_id . '">';
-      echo '<i class="far fa-thumbs-up mr-2"></i>';
+      echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
       echo $host . " (TCP/" . $port_num . ")";
     echo '</span>';
     $next = true;
 } else {
     echo '<span style="color: red;" id="ldap_test_port_' . $authldaps_id . '">';
-      echo '<i class="far fa-thumbs-down mr-2"></i>';
+      echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
       echo $host . " (TCP/" . $port_num . ")<br />";
       echo "$errstr ($errno)";
     echo '</span>';
@@ -129,19 +129,19 @@ if (fsockopen($host, $port_num, $errno, $errstr, 5)) {
 if ($next) {
     if (empty($base_dn)) {
          echo '<span style="color: red;" id="ldap_test_basedn_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-down mr-2"></i>';
+            echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
             echo __('BaseDN should not been empty!', 'ldaptools');
          echo '</span>';
          $next = false;
     } else {
         echo '<span style="color: green;" id="ldap_test_basedn_' . $authldaps_id . '">';
-         echo '<i class="far fa-thumbs-up mr-2"></i>';
+         echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
         echo '</span>';
         $next = true;
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_basedn_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2"></i>';
+      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
       echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
@@ -171,7 +171,7 @@ if ($next) {
         }
 
          echo '<span style="color: green;" id="ldap_test_connect_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-up mr-2"></i>';
+            echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
          echo '</span>';
          $next = true;
     } else {
@@ -186,7 +186,7 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_connect_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2"></i>';
+      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
       echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
@@ -208,14 +208,14 @@ if ($next && $use_bind) {
          $next = false;
     } else {
         echo '<span style="color: green;" id="ldap_test_bind_' . $authldaps_id . '">';
-         echo '<i class="far fa-thumbs-up mr-2"></i>';
+         echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
         echo '</span>';
         $next = true;
     }
 } else {
     if ($use_bind) {
          echo '<span style="color: red;" id="ldap_test_bind_' . $authldaps_id . '">';
-            echo '<i class="far fa-hand-point-left mr-2"></i>';
+            echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
             echo __('Fix previous!', 'ldaptools');
          echo '</span>';
          $next = false;
@@ -252,7 +252,7 @@ if ($next) {
         $count_entries = ldap_count_entries($ldap, $results);
         if ($count_entries > 0) {
              echo '<span style="color: green;" id="ldap_test_filter_' . $authldaps_id . '">';
-               echo '<i class="far fa-thumbs-up mr-2"></i>';
+               echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
                echo $count_entries . " entries";
                $entriesToolTip = '<span style="font-weight:bold;">First entry</span><br />';
                $firtEntry = ldap_first_entry($ldap, $results);
@@ -262,7 +262,7 @@ if ($next) {
              $next = true;
         } else {
             echo '<span style="color: red;" id="ldap_test_filter_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-down mr-2"></i>';
+            echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
             //TRANS: %s is the LDAP search content
             echo sprintf(__('No entry found: %s', 'ldaptools'), $search);
             echo '</span>';
@@ -271,7 +271,7 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_search_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2"></i>';
+      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
       echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
@@ -300,7 +300,7 @@ if ($next) {
         $entries = ldap_get_entries($ldap, $results);
         if ($count_entries > 0) {
             echo '<span style="color: green;" id="ldap_test_filter_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-up mr-2"></i>';
+            echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
             //TRANS: %s is the LDAP count entries returned
             echo sprintf(__('%s entries', 'ldaptools'), $count_entries);
             $entriesToolTip = '<span style="font-weight:bold;">' . __("First entry", "ldaptools") . '</span><br />';
@@ -312,7 +312,7 @@ if ($next) {
             $next = true;
         } else {
             echo '<span style="color: red;" id="ldap_test_filter_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-down mr-2"></i>';
+            echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
             //TRANS: %s is the LDAP search filter content
             echo sprintf(__('No entry found: %s', 'ldaptools'), $filter);
             echo '</span>';
@@ -321,7 +321,7 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_filter_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2"></i>';
+      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
       echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
@@ -346,7 +346,7 @@ if ($next) {
          $next = false;
     } else {
         echo '<span style="color: green;" id="ldap_test_attributes_' . $authldaps_id . '">';
-         echo '<i class="far fa-thumbs-up mr-2"></i>';
+         echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
          $attrsToolTip = '<span style="font-weight:bold;">' . __("Available attributes", "ldaptools") . '</span><br />';
         for ($i = 0; $i < $attrs["count"]; $i++) {
             $attrsToolTip .= $attrs[$i] . "<br />";
@@ -357,7 +357,7 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_attributes_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2"></i>';
+      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
       echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;

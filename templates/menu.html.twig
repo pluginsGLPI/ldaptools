@@ -1,0 +1,66 @@
+{#
+ # -------------------------------------------------------------------------
+ # ldaptools plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of ldaptools.
+ #
+ # ldaptools is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # ldaptools is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with ldaptools. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @author    François Legastelois
+ # @copyright Copyright (C) 2021-2022 by Teclib'.
+ # @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://services.glpi-network.com
+ # -------------------------------------------------------------------------
+ #}
+
+
+
+{% if not can_use %}
+    <div class="center warning" style="width: 40%; margin: auto;">
+        <i class="fa fa-exclamation-triangle fa-3x"></i>
+        <p>{{ _x('error', __("The LDAP extension of your PHP parser isn't installed")) }}</p>
+    </div>
+{% else %}
+    <div class="center">
+        <table class="tab_cadre">
+            <thead>
+                <tr>
+                    <th>{{ __('LDAP Tools', 'ldaptools') }}</th>
+                    <th>{{ __('Comment') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for filepath in filepaths %}
+                    {% if filepath.link is defined and filepath.name is defined %}
+                        <tr>
+                            <td>
+                                <a href="{{ filepath.link }}">{{ filepath.name }}</a>
+                            </td>
+                            {% if filepath.comment is defined %}
+                                <td>
+                                    {{ filepath.comment }}
+                                </td>
+                            {% else %}
+                                <td>{{ __('No comments') }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}

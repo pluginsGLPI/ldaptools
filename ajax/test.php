@@ -36,8 +36,8 @@ Html::header_nocache();
 
 Session::checkRight("config", UPDATE);
 
-$authldaps_id = intval($_GET["authldaps_id"]) ?? 0;
-$authldapreplicates_id = intval($_GET["authldapreplicates_id"]) ?? 0;
+$authldaps_id = intval($_GET["authldaps_id"]);
+$authldapreplicates_id = intval($_GET["authldapreplicates_id"]);
 $is_replicat = $authldapreplicates_id !== 0;
 
 if (empty($authldaps_id)) {
@@ -67,12 +67,7 @@ if ($is_replicat) {
 
 $username      = $AuthLDAP->getField('rootdn');
 
-if (method_exists('GLPIKey', 'decrypt')) {
-    $password = (new GLPIKey())->decrypt($AuthLDAP->getField('rootdn_passwd'));
-} else {
-    // @phpstan-ignore-next-line
-    $password = Toolbox::sodiumDecrypt($AuthLDAP->getField('rootdn_passwd'));
-}
+$password = (new GLPIKey())->decrypt($AuthLDAP->getField('rootdn_passwd'));
 
 $base_dn       = $AuthLDAP->getField('basedn');
 $login_field   = $AuthLDAP->getField('login_field');
@@ -96,6 +91,9 @@ if ($AuthLDAP->isField('tls_keyfile')) {
 }
 
 $next = false;
+$ldap = null;
+$count_entries = 0;
+$results = [];
 
 echo '<tr id="ldap_test_' . $authldaps_id . '_' . $authldapreplicates_id . '">';
 if ($is_replicat) {
@@ -176,11 +174,6 @@ if ($next) {
          $next = true;
     } else {
         echo '<span style="color: red;" id="ldap_test_connect_' . $authldaps_id . '">';
-         //TRANS: %s is the LDAP error number
-         $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
-         //TRANS: %s is the LDAP error message
-         $toolTip .= "<br />" . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
-         Html::showToolTip($toolTip);
         echo '</span>';
         $next = false;
     }

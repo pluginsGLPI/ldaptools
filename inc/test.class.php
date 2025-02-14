@@ -67,20 +67,20 @@ class PluginLdaptoolsTest extends CommonGLPI
 
     public static function getIcon()
     {
-        return "fas fa-bug";
+        return 'fas fa-bug';
     }
 
     public static function showResult()
     {
         $ldaps_map = array_map(function ($ldap_master) {
             return [
-                "master" => $ldap_master,
-                "replicat" => AuthLDAP::getAllReplicateForAMaster($ldap_master['id'])
+                'master'   => $ldap_master,
+                'replicat' => AuthLDAP::getAllReplicateForAMaster($ldap_master['id']),
             ];
         }, AuthLDAP::getLdapServers());
 
         TemplateRenderer::getInstance()->display('@ldaptools/test.html.twig', [
-            'ldap' => self::class,
+            'ldap'         => self::class,
             'ldap_servers' => $ldaps_map,
         ]);
     }

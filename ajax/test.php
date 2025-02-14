@@ -30,15 +30,15 @@
  */
 
 $AJAX_INCLUDE = 1;
-include("../../../inc/includes.php");
-header("Content-Type: text/html; charset=UTF-8");
+include('../../../inc/includes.php');
+header('Content-Type: text/html; charset=UTF-8');
 Html::header_nocache();
 
-Session::checkRight("config", UPDATE);
+Session::checkRight('config', UPDATE);
 
-$authldaps_id = intval($_GET["authldaps_id"]);
-$authldapreplicates_id = intval($_GET["authldapreplicates_id"]);
-$is_replicat = $authldapreplicates_id !== 0;
+$authldaps_id          = intval($_GET['authldaps_id']);
+$authldapreplicates_id = intval($_GET['authldapreplicates_id']);
+$is_replicat           = $authldapreplicates_id !== 0;
 
 if (empty($authldaps_id)) {
     http_response_code(400);
@@ -46,18 +46,18 @@ if (empty($authldaps_id)) {
     die;
 }
 
-$AuthLDAP = new AuthLDAP();
+$AuthLDAP          = new AuthLDAP();
 $authreplicat_ldap = new AuthLdapReplicate();
 
 if (!$AuthLDAP->can($authldaps_id, READ)) {
     http_response_code(403);
-    Toolbox::logWarning("Missing rights to read AuthLDAP data.");
+    Toolbox::logWarning('Missing rights to read AuthLDAP data.');
     die;
 }
 
 $AuthLDAP->getFromDB($authldaps_id);
-$hostname      = $AuthLDAP->getField('host');
-$port_num      = intval($AuthLDAP->getField('port'));
+$hostname = $AuthLDAP->getField('host');
+$port_num = intval($AuthLDAP->getField('port'));
 
 if ($is_replicat) {
     $authreplicat_ldap->getFromDB($authldapreplicates_id);
@@ -65,15 +65,15 @@ if ($is_replicat) {
     $port_num = intval($authreplicat_ldap->getField('port'));
 }
 
-$username      = $AuthLDAP->getField('rootdn');
+$username = $AuthLDAP->getField('rootdn');
 
 $password = (new GLPIKey())->decrypt($AuthLDAP->getField('rootdn_passwd'));
 
-$base_dn       = $AuthLDAP->getField('basedn');
-$login_field   = $AuthLDAP->getField('login_field');
-$use_tls       = $AuthLDAP->getField('use_tls');
-$filter        = Html::entity_decode_deep($AuthLDAP->getField('condition'));
-$search        = "(cn=*)";
+$base_dn     = $AuthLDAP->getField('basedn');
+$login_field = $AuthLDAP->getField('login_field');
+$use_tls     = $AuthLDAP->getField('use_tls');
+$filter      = Html::entity_decode_deep($AuthLDAP->getField('condition'));
+$search      = '(cn=*)';
 
 $use_bind = true;
 if ($AuthLDAP->isField('use_bind')) {
@@ -90,19 +90,19 @@ if ($AuthLDAP->isField('tls_keyfile')) {
     $tls_keyfile = $AuthLDAP->getField('tls_keyfile');
 }
 
-$next = false;
-$ldap = null;
+$next          = false;
+$ldap          = null;
 $count_entries = 0;
-$results = [];
+$results       = [];
 
 echo '<tr id="ldap_test_' . $authldaps_id . '_' . $authldapreplicates_id . '">';
 if ($is_replicat) {
-    echo "<td><i class='ti ti-copy mr-2 m-2 pl-4'></i>" . $authreplicat_ldap->getField('name') . "</td>";
+    echo "<td><i class='ti ti-copy mr-2 m-2 pl-4'></i>" . $authreplicat_ldap->getField('name') . '</td>';
 } else {
-    echo "<td><i class='ti ti-crown mr-2 m-2'></i>" . $AuthLDAP->getLink() . "</td>";
+    echo "<td><i class='ti ti-crown mr-2 m-2'></i>" . $AuthLDAP->getLink() . '</td>';
 }
 
-   echo "<td>";
+echo '<td>';
 if (preg_match_all("/(ldap:\/\/|ldaps:\/\/)(.*)/", $hostname, $matches)) {
     $host = $matches[2][0];
 } else {
@@ -110,51 +110,51 @@ if (preg_match_all("/(ldap:\/\/|ldaps:\/\/)(.*)/", $hostname, $matches)) {
 }
 if (fsockopen($host, $port_num, $errno, $errstr, 5)) {
     echo '<span style="color: green;" id="ldap_test_port_' . $authldaps_id . '">';
-      echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
-      echo $host . " (TCP/" . $port_num . ")";
+    echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
+    echo $host . ' (TCP/' . $port_num . ')';
     echo '</span>';
     $next = true;
 } else {
     echo '<span style="color: red;" id="ldap_test_port_' . $authldaps_id . '">';
-      echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
-      echo $host . " (TCP/" . $port_num . ")<br />";
-      echo "$errstr ($errno)";
+    echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
+    echo $host . ' (TCP/' . $port_num . ')<br />';
+    echo "$errstr ($errno)";
     echo '</span>';
 }
-   echo "</td>";
+echo '</td>';
 
-   echo "<td>";
+echo '<td>';
 if ($next) {
     if (empty($base_dn)) {
-         echo '<span style="color: red;" id="ldap_test_basedn_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
-            echo __('BaseDN should not been empty!', 'ldaptools');
-         echo '</span>';
-         $next = false;
+        echo '<span style="color: red;" id="ldap_test_basedn_' . $authldaps_id . '">';
+        echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
+        echo __('BaseDN should not been empty!', 'ldaptools');
+        echo '</span>';
+        $next = false;
     } else {
         echo '<span style="color: green;" id="ldap_test_basedn_' . $authldaps_id . '">';
-         echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
+        echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
         echo '</span>';
         $next = true;
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_basedn_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
-      echo __('Fix previous!', 'ldaptools');
+    echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
+    echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
 }
-   echo "</td>";
+echo '</td>';
 
-   echo "<td>";
+echo '<td>';
 if ($next) {
     if ($ldap = ldap_connect($hostname, $port_num)) {
-         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
-         ldap_set_option(null, LDAP_OPT_DEBUG_LEVEL, 7);
-         ldap_set_option($ldap, LDAP_OPT_NETWORK_TIMEOUT, 5);
-         ldap_set_option($ldap, LDAP_OPT_TIMELIMIT, 10);
-         ldap_set_option($ldap, LDAP_OPT_SIZELIMIT, 50);
+        ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option(null, LDAP_OPT_DEBUG_LEVEL, 7);
+        ldap_set_option($ldap, LDAP_OPT_NETWORK_TIMEOUT, 5);
+        ldap_set_option($ldap, LDAP_OPT_TIMELIMIT, 10);
+        ldap_set_option($ldap, LDAP_OPT_SIZELIMIT, 50);
 
         if (!empty($tls_certfile) && file_exists($tls_certfile)) {
             ldap_set_option(null, LDAP_OPT_X_TLS_CERTFILE, $tls_certfile);
@@ -168,10 +168,10 @@ if ($next) {
             @ldap_start_tls($ldap);
         }
 
-         echo '<span style="color: green;" id="ldap_test_connect_' . $authldaps_id . '">';
-            echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
-         echo '</span>';
-         $next = true;
+        echo '<span style="color: green;" id="ldap_test_connect_' . $authldaps_id . '">';
+        echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
+        echo '</span>';
+        $next = true;
     } else {
         echo '<span style="color: red;" id="ldap_test_connect_' . $authldaps_id . '">';
         echo '</span>';
@@ -179,80 +179,80 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_connect_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
-      echo __('Fix previous!', 'ldaptools');
+    echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
+    echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
 }
-   echo "</td>";
+echo '</td>';
 
-   echo "<td>";
+echo '<td>';
 if ($next && $use_bind) {
     $bind_result = ldap_bind($ldap, $username, $password);
     if (!$bind_result) {
-         echo '<span style="color: red;" id="ldap_test_bind_' . $authldaps_id . '">';
-            echo __('Could not bind', 'ldaptools');
-            //TRANS: %s is the LDAP error number
-            $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
-            //TRANS: %s is the LDAP error message
-            $toolTip .= "<br />" . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
-            Html::showToolTip($toolTip);
-         echo '</span>';
-         $next = false;
+        echo '<span style="color: red;" id="ldap_test_bind_' . $authldaps_id . '">';
+        echo __('Could not bind', 'ldaptools');
+        //TRANS: %s is the LDAP error number
+        $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+        //TRANS: %s is the LDAP error message
+        $toolTip .= '<br />' . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+        Html::showToolTip($toolTip);
+        echo '</span>';
+        $next = false;
     } else {
         echo '<span style="color: green;" id="ldap_test_bind_' . $authldaps_id . '">';
-         echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
+        echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
         echo '</span>';
         $next = true;
     }
 } else {
     if ($use_bind) {
-         echo '<span style="color: red;" id="ldap_test_bind_' . $authldaps_id . '">';
-            echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
-            echo __('Fix previous!', 'ldaptools');
-         echo '</span>';
-         $next = false;
+        echo '<span style="color: red;" id="ldap_test_bind_' . $authldaps_id . '">';
+        echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
+        echo __('Fix previous!', 'ldaptools');
+        echo '</span>';
+        $next = false;
     } else {
         echo '<span style="color: orange;" id="ldap_test_bind_' . $authldaps_id . '">';
-         echo "Disabled";
-         Html::showToolTip(
-             __("Bind user / password authentication is disabled,
+        echo 'Disabled';
+        Html::showToolTip(
+            __("Bind user / password authentication is disabled,
                which means your LDAP server allows anonymous requests,
                or authenticates with a key. If it's voluntary, don't worry.<br />
                If the following tests are in error, you should check this authentication!
-               Maybe it's ultimately necessary ;)", 'ldaptools')
-         );
+               Maybe it's ultimately necessary ;)", 'ldaptools'),
+        );
         echo '</span>';
     }
 }
-   echo "</td>";
+echo '</td>';
 
-   echo "<td>";
+echo '<td>';
 if ($next) {
     $results = @ldap_search($ldap, $base_dn, $search, [], 0, 50);
     if (!$results) {
-         echo '<span style="color: red;" id="ldap_test_search_' . $authldaps_id . '">';
-            //TRANS: %s is the LDAP error number
-            $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
-            //TRANS: %s is the LDAP error message
-            $toolTip .= "<br />" . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
-            Html::showToolTip($toolTip);
-            //TRANS: %s is the search content
-            echo sprintf(__('Search error: %s', 'ldaptools'), $search);
-         echo '</span>';
-         $next = false;
+        echo '<span style="color: red;" id="ldap_test_search_' . $authldaps_id . '">';
+        //TRANS: %s is the LDAP error number
+        $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+        //TRANS: %s is the LDAP error message
+        $toolTip .= '<br />' . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+        Html::showToolTip($toolTip);
+        //TRANS: %s is the search content
+        echo sprintf(__('Search error: %s', 'ldaptools'), $search);
+        echo '</span>';
+        $next = false;
     } else {
         $count_entries = ldap_count_entries($ldap, $results);
         if ($count_entries > 0) {
-             echo '<span style="color: green;" id="ldap_test_filter_' . $authldaps_id . '">';
-               echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
-               echo $count_entries . " entries";
-               $entriesToolTip = '<span style="font-weight:bold;">First entry</span><br />';
-               $firtEntry = ldap_first_entry($ldap, $results);
-               $entriesToolTip .= ldap_get_dn($ldap, $firtEntry);
-               Html::showToolTip($entriesToolTip);
-             echo '</span>';
-             $next = true;
+            echo '<span style="color: green;" id="ldap_test_filter_' . $authldaps_id . '">';
+            echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
+            echo $count_entries . ' entries';
+            $entriesToolTip = '<span style="font-weight:bold;">First entry</span><br />';
+            $firtEntry      = ldap_first_entry($ldap, $results);
+            $entriesToolTip .= ldap_get_dn($ldap, $firtEntry);
+            Html::showToolTip($entriesToolTip);
+            echo '</span>';
+            $next = true;
         } else {
             echo '<span style="color: red;" id="ldap_test_filter_' . $authldaps_id . '">';
             echo '<i class="far fa-thumbs-down mr-2 m-2"></i>';
@@ -264,29 +264,29 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_search_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
-      echo __('Fix previous!', 'ldaptools');
+    echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
+    echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
 }
-   echo "</td>";
+echo '</td>';
 
-   echo "<td>";
+echo '<td>';
 if ($next) {
     if (empty($filter)) {
-         $filter = $search;
+        $filter = $search;
     }
 
-       $results = @ldap_search($ldap, $base_dn, $filter, [], 0, 50);
+    $results = @ldap_search($ldap, $base_dn, $filter, [], 0, 50);
     if (!$results) {
         echo '<span style="color: red;" id="ldap_test_filter_' . $authldaps_id . '">';
-         //TRANS: %s is the LDAP error number
-         $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
-         //TRANS: %s is the LDAP error message
-         $toolTip .= "<br />" . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
-         Html::showToolTip($toolTip);
-         //TRANS: %s is the LDAP search filter content
-         echo sprintf(__('Filter error: %s', 'ldaptools'), $filter);
+        //TRANS: %s is the LDAP error number
+        $toolTip = sprintf(__('Error number: %s', 'ldaptools'), ldap_errno($ldap));
+        //TRANS: %s is the LDAP error message
+        $toolTip .= '<br />' . sprintf(__('Error message: %s', 'ldaptools'), ldap_err2str(ldap_errno($ldap)));
+        Html::showToolTip($toolTip);
+        //TRANS: %s is the LDAP search filter content
+        echo sprintf(__('Filter error: %s', 'ldaptools'), $filter);
         echo '</span>';
         $next = false;
     } else {
@@ -296,7 +296,7 @@ if ($next) {
             echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
             //TRANS: %s is the LDAP count entries returned
             echo sprintf(__('%s entries', 'ldaptools'), $count_entries);
-            $entriesToolTip = '<span style="font-weight:bold;">' . __("First entry", "ldaptools") . '</span><br />';
+            $entriesToolTip = '<span style="font-weight:bold;">' . __('First entry', 'ldaptools') . '</span><br />';
             if ($firtEntry = ldap_first_entry($ldap, $results)) {
                 $entriesToolTip .= ldap_get_dn($ldap, $firtEntry);
             }
@@ -314,46 +314,46 @@ if ($next) {
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_filter_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
-      echo __('Fix previous!', 'ldaptools');
+    echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
+    echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
 }
-   echo "</td>";
+echo '</td>';
 
-   echo "<td>";
+echo '<td>';
 if ($next) {
     $attrs = false;
     if ($first = ldap_first_entry($ldap, $results)) {
         $attrs = ldap_get_attributes($ldap, $first);
     }
     if (!$attrs) {
-         echo '<span style="color: red;" id="ldap_test_attributes_' . $authldaps_id . '">';
-            //TRANS: %s is the LDAP error number
-            $toolTip = sprintf(__('Error number: %s'), ldap_errno($ldap));
-            //TRANS: %s is the LDAP error message
-            $toolTip .= "<br />" . sprintf(__('Error message: %s'), ldap_err2str(ldap_errno($ldap)));
-            Html::showToolTip($toolTip);
-            echo __('Get attributes error', 'ldaptools');
-         echo '</span>';
-         $next = false;
+        echo '<span style="color: red;" id="ldap_test_attributes_' . $authldaps_id . '">';
+        //TRANS: %s is the LDAP error number
+        $toolTip = sprintf(__('Error number: %s'), ldap_errno($ldap));
+        //TRANS: %s is the LDAP error message
+        $toolTip .= '<br />' . sprintf(__('Error message: %s'), ldap_err2str(ldap_errno($ldap)));
+        Html::showToolTip($toolTip);
+        echo __('Get attributes error', 'ldaptools');
+        echo '</span>';
+        $next = false;
     } else {
         echo '<span style="color: green;" id="ldap_test_attributes_' . $authldaps_id . '">';
-         echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
-         $attrsToolTip = '<span style="font-weight:bold;">' . __("Available attributes", "ldaptools") . '</span><br />';
-        for ($i = 0; $i < $attrs["count"]; $i++) {
-            $attrsToolTip .= $attrs[$i] . "<br />";
+        echo '<i class="far fa-thumbs-up mr-2 m-2"></i>';
+        $attrsToolTip = '<span style="font-weight:bold;">' . __('Available attributes', 'ldaptools') . '</span><br />';
+        for ($i = 0; $i < $attrs['count']; $i++) {
+            $attrsToolTip .= $attrs[$i] . '<br />';
         }
-         Html::showToolTip($attrsToolTip);
+        Html::showToolTip($attrsToolTip);
         echo '</span>';
         $next = true;
     }
 } else {
     echo '<span style="color: red;" id="ldap_test_attributes_' . $authldaps_id . '">';
-      echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
-      echo __('Fix previous!', 'ldaptools');
+    echo '<i class="far fa-hand-point-left mr-2 m-2"></i>';
+    echo __('Fix previous!', 'ldaptools');
     echo '</span>';
     $next = false;
 }
-   echo "</td>";
-echo "</tr>";
+echo '</td>';
+echo '</tr>';

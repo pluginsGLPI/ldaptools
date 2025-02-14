@@ -57,7 +57,7 @@ class PluginLdaptoolsMenu extends CommonGLPI
 
     public static function getIcon()
     {
-        return "fas fa-sign-in-alt";
+        return 'fas fa-sign-in-alt';
     }
 
     public static function getMenuContent()
@@ -73,17 +73,17 @@ class PluginLdaptoolsMenu extends CommonGLPI
 
             $link_text = "<span class='d-none d-xxl-block'>" .
                       PluginLdaptoolsMenu::getTypeName(Session::getPluralNumber()) .
-                      "</span>";
-            $links =  [
+                      '</span>';
+            $links = [
                 "<i class='" . PluginLdaptoolsMenu::getIcon() . "'></i>$link_text"
-               => PluginLdaptoolsMenu::getSearchURL(false)
+               => PluginLdaptoolsMenu::getSearchURL(false),
             ];
 
             $menu['options']['test'] = [
                 'title' => PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
                 'page'  => "$base_dir/front/test.php",
                 'icon'  => PluginLdaptoolsTest::getIcon(),
-                'links' => []
+                'links' => [],
             ];
         }
 
@@ -101,7 +101,7 @@ class PluginLdaptoolsMenu extends CommonGLPI
             foreach (glob(PLUGIN_LDAPTOOLS_ROOT . '/inc/*') as $filepath) {
                 if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
                     $filepaths[$filepath] = [];
-                    $classname = 'PluginLdaptools' . ucfirst($matches[1]);
+                    $classname            = 'PluginLdaptools' . ucfirst($matches[1]);
                     if (method_exists($classname, 'getLink')) {
                         $filepaths[$filepath]['link'] = $classname::getLink();
                         $filepaths[$filepath]['name'] = $classname::getTypeName();
@@ -115,8 +115,8 @@ class PluginLdaptoolsMenu extends CommonGLPI
             }
         }
         TemplateRenderer::getInstance()->display('@ldaptools/menu.html.twig', [
-            'can_use' => Toolbox::canUseLdap(),
-            'filepaths' => $filepaths
+            'can_use'   => Toolbox::canUseLdap(),
+            'filepaths' => $filepaths,
         ]);
     }
 }

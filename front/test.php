@@ -29,16 +29,16 @@
  * -------------------------------------------------------------------------
  */
 
-include("../../../inc/includes.php");
+include('../../../inc/includes.php');
 
-Session::checkRight("config", UPDATE);
+Session::checkRight('config', UPDATE);
 
 Html::header(
     PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
     $_SERVER['PHP_SELF'],
-    "tools",
-    "PluginLdaptoolsMenu",
-    "test"
+    'tools',
+    'PluginLdaptoolsMenu',
+    'test',
 );
 
 PluginLdaptoolsTest::showResult();

@@ -29,16 +29,16 @@
  * -------------------------------------------------------------------------
  */
 
-include("../../../inc/includes.php");
+include('../../../inc/includes.php');
 
-Session::checkRight("config", UPDATE);
+Session::checkRight('config', UPDATE);
 
 Html::header(
     __('LDAP Tools', 'ldaptools'),
     $_SERVER['PHP_SELF'],
     'tools',
     'PluginLdaptoolsMenu',
-    'menu'
+    'menu',
 );
 
 PluginLdaptoolsMenu::showCentralPage();

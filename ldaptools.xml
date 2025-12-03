@@ -52,6 +52,11 @@ Effectue différents tests sur tous les annuaires LDAP déclarés dans GLPI :
    </authors>
    <versions>
       <version>
+         <num>0.2.0</num>
+         <compatibility>~10.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/ldaptools/releases/download/0.2.0/glpi-ldaptools-0.2.0.tar.bz2</download_url>
+      </version>
+      <version>
          <num>0.1.0</num>
          <compatibility>~9.5.0 | ~10.0.0</compatibility>
       </version>

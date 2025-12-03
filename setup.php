@@ -78,7 +78,7 @@ function plugin_version_ldaptools()
         'version'      => PLUGIN_LDAPTOOLS_VERSION,
         'author'       => '<a href="https://services.glpi-network.com">teclib\'</a>',
         'license'      => 'GPLv3',
-        'homepage'     => 'https://services.glpi-network.com',
+        'homepage'     => 'https://github.com/pluginsglpi/ldaptools',
         'requirements' => [
             'glpi' => [
                 'min' => PLUGIN_LDAPTOOLS_MIN_GLPI,

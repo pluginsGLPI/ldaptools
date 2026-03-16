@@ -46,7 +46,7 @@ Effectue différents tests sur tous les annuaires LDAP déclarés dans GLPI :
    <homepage>https://github.com/pluginsglpi/ldaptools</homepage>
    <download>https://github.com/pluginsglpi/ldaptools/releases</download>
    <issues>https://github.com/pluginsglpi/ldaptools/issues</issues>
-   <readme>https://github.com/pluginsglpi/ldaptools/blob/main/README.md</readme>
+   <readme>https://help.glpi-project.org/doc-plugins/ldaptools</readme>
    <authors>
       <author>Teclib'</author>
    </authors>

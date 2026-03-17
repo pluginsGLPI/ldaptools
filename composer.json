@@ -1,20 +1,26 @@
 {
+    "name": "glpi-project/ldaptools",
+    "description": "LDAP Tools plugin for GLPI",
+    "type": "glpi-plugin",
+    "license": "GPL-3.0-or-later",
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.1"
     },
     "require-dev": {
         "glpi-project/tools": "^0.8.3"
     },
-    "config": {
-        "optimize-autoloader": true,
-        "platform": {
-            "php": "7.4.0"
-        },
-        "sort-packages": true
+    "autoload": {
+        "psr-4": {
+            "GlpiPlugin\\Ldaptools\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "Glpi\\Tools\\": "../../tools/src/"
         }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
     }
 }

@@ -23,9 +23,9 @@
  * along with ldaptools. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
  * @author    François Legastelois
- * @copyright Copyright (C) 2021-2022 by Teclib'.
+ * @copyright Copyright (C) 2021-2024 by Teclib'.
  * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
- * @link      https://services.glpi-network.com
+ * @link      https://github.com/pluginsGLPI/ldaptools
  * -------------------------------------------------------------------------
  */
 
@@ -34,23 +34,9 @@
  *
  * @return boolean
  */
-function plugin_ldaptools_install()
+function plugin_ldaptools_install(): bool
 {
-    $migration = new Migration(PLUGIN_LDAPTOOLS_VERSION);
-
-    // Parse inc directory
-    foreach (glob(PLUGIN_LDAPTOOLS_ROOT . '/inc/*') as $filepath) {
-        // Load *.class.php files and get the class name
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-            $classname = 'PluginLdaptools' . ucfirst($matches[1]);
-            include_once($filepath);
-            // If the install method exists, load it
-            if (method_exists($classname, 'install')) {
-                $classname::install($migration);
-            }
-        }
-    }
-
+    // This plugin does not create any database tables.
     return true;
 }
 
@@ -59,22 +45,8 @@ function plugin_ldaptools_install()
  *
  * @return boolean
  */
-function plugin_ldaptools_uninstall()
+function plugin_ldaptools_uninstall(): bool
 {
-    $migration = new Migration(PLUGIN_LDAPTOOLS_VERSION);
-
-    // Parse inc directory
-    foreach (glob(PLUGIN_LDAPTOOLS_ROOT . '/inc/*') as $filepath) {
-        // Load *.class.php files and get the class name
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-            $classname = 'PluginLdaptools' . ucfirst($matches[1]);
-            include_once($filepath);
-            // If the install method exists, load it
-            if (method_exists($classname, 'uninstall')) {
-                $classname::uninstall($migration);
-            }
-        }
-    }
-
+    // This plugin does not create any database tables.
     return true;
 }

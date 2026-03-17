@@ -23,24 +23,27 @@
  * along with ldaptools. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
  * @author    François Legastelois
- * @copyright Copyright (C) 2021-2022 by Teclib'.
+ * @copyright Copyright (C) 2021-2024 by Teclib'.
  * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
- * @link      https://services.glpi-network.com
+ * @link      https://github.com/pluginsGLPI/ldaptools
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
+use GlpiPlugin\Ldaptools\Menu;
+use GlpiPlugin\Ldaptools\LdapTest;
 
 Session::checkRight('config', UPDATE);
 
+// Html::header() 4th param must be the legacy short class name resolvable by GLPI's itemtype resolver.
+// Using the FQDN (GlpiPlugin\Ldaptools\LdapTest) causes "The requested item has not been found".
 Html::header(
-    PluginLdaptoolsTest::getTypeName(Session::getPluralNumber()),
+    LdapTest::getTypeName(Session::getPluralNumber()),
     $_SERVER['PHP_SELF'],
     'tools',
     'PluginLdaptoolsMenu',
     'test',
 );
 
-PluginLdaptoolsTest::showResult();
+LdapTest::showResult();
 
 Html::footer();

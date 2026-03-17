@@ -1,21 +1,47 @@
-# LDAP Tools for GLPI
+# LDAP Tools — GLPI Plugin
 
-[README Français](README_FR.md)
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE.md)
 
-This plugin offers several tools related to LDAP directories declared in GLPI.
+LDAP Tools offers diagnostic utilities for LDAP directories configured in GLPI.
 
-## First tool : LDAP configurations tests
+## Features
 
-Performs various tests on all LDAP directories (and replicates) declared in GLPI :
+### LDAP configuration test
 
-1. test if TCP stream is opened from GLPI to LDAP server hostname / port
-2. check is "BaseDN" field is filled in correctly
-3. initiate an "ldap_connect" to validate the LDAP URI
-4. execute or not an LDAP BIND authentication (with user/password, or TLS cert/key)
-5. perform a generic LDAP Search (with cn=\*) and try to count first entries
-6. perform a specific LDAP Search (with LDAP Filter configured) and try to count first entries
-7. get and display all LDAP attributes available on the first entry found
+Runs 7 sequential checks against every LDAP directory (and its replicates) declared in GLPI:
 
-## Screenshots
+1. **TCP stream** — verifies the host/port is reachable from the GLPI server
+2. **BaseDN** — ensures the BaseDN field is not empty
+3. **LDAP URI** — attempts `ldap_connect` to validate the URI
+4. **Bind auth** — performs an LDAP BIND (or reports if anonymous/disabled)
+5. **Generic search** — runs `(cn=*)` and counts up to 50 entries
+6. **Filtered search** — runs the configured LDAP filter and counts results
+7. **Attributes** — lists all available attributes on the first matched entry
 
-![LDAP Test all result](docs/screenshots/test.all.fullresult.png)
+## Compatibility
+
+| Plugin version | GLPI version |
+|---------------|--------------|
+| 1.x           | 11.0.x       |
+| 0.2.x         | 10.0.x       |
+| 0.1.x         | 9.5.x / 10.0.x |
+
+## Requirements
+
+- PHP ≥ 8.1
+- `php-ldap` extension enabled
+
+## Installation
+
+1. Download the [latest release](https://github.com/pluginsGLPI/ldaptools/releases)
+2. Extract to your GLPI `plugins/` directory as `ldaptools/`
+3. Go to **Setup > Plugins** and activate *LDAP Tools*
+4. Access via **Tools > LDAP Tools**
+
+## Usage
+
+Navigate to **Tools > LDAP Tools > LDAP Test**. Each configured LDAP directory is tested automatically on page load via async requests. Results are shown in a colour-coded table (green = OK, orange = warning, red = failure).
+
+## License
+
+GPLv3 — see [LICENSE.md](LICENSE.md)

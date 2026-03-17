@@ -21,46 +21,68 @@
  # along with ldaptools. If not, see <http://www.gnu.org/licenses/>.
  # -------------------------------------------------------------------------
  # @author    François Legastelois
- # @copyright Copyright (C) 2021-2022 by Teclib'.
+ # @copyright Copyright (C) 2021-2024 by Teclib'.
  # @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
- # @link      https://services.glpi-network.com
+ # @link      https://github.com/pluginsGLPI/ldaptools
  # -------------------------------------------------------------------------
  #}
 
-
-
 {% if not can_use %}
-    <div class="center warning" style="width: 40%; margin: auto;">
-        <i class="fa fa-exclamation-triangle fa-3x"></i>
-        <p>{{ _x('error', __("The LDAP extension of your PHP parser isn't installed")) }}</p>
+    <div class="alert alert-warning d-flex align-items-center mx-auto mt-3" style="max-width: 42rem;" role="alert">
+        <i class="ti ti-alert-triangle fs-2 me-3 flex-shrink-0"></i>
+        <div>
+            {{ __("The LDAP extension of your PHP parser isn't installed") }}
+        </div>
     </div>
 {% else %}
-    <div class="center">
-        <table class="tab_cadre">
-            <thead>
-                <tr>
-                    <th>{{ __('LDAP Tools', 'ldaptools') }}</th>
-                    <th>{{ __('Comment') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for filepath in filepaths %}
-                    {% if filepath.link is defined and filepath.name is defined %}
-                        <tr>
-                            <td>
-                                <a href="{{ filepath.link }}">{{ filepath.name }}</a>
-                            </td>
-                            {% if filepath.comment is defined %}
-                                <td>
-                                    {{ filepath.comment }}
-                                </td>
-                            {% else %}
-                                <td>{{ __('No comments') }}</td>
-                            {% endif %}
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="container-fluid mt-3">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ti ti-plug-connected me-2"></i>
+                            {{ __('LDAP Tools', 'ldaptools') }}
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-vcenter card-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('Tool', 'ldaptools') }}</th>
+                                        <th>{{ __('Comment') }}</th>
+                                        <th class="w-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tool in tools %}
+                                        <tr>
+                                            <td>
+                                                <i class="{{ tool.icon }} me-2 text-muted"></i>
+                                                <strong>{{ tool.name }}</strong>
+                                            </td>
+                                            <td class="text-muted">{{ tool.comment }}</td>
+                                            <td>
+                                                <a href="{{ tool.link }}" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="ti ti-arrow-right me-1"></i>
+                                                    {{ __('Open') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted py-3">
+                                                {{ __('No tools available') }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endif %}
